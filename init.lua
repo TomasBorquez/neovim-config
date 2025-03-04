@@ -104,6 +104,7 @@ require("lazy").setup({
       "hrsh7th/cmp-cmdline",
       "L3MON4D3/LuaSnip",
       "saadparwaiz1/cmp_luasnip",
+      "stevearc/conform.nvim",
       {
         "folke/lazydev.nvim",
         ft = "lua",
@@ -121,16 +122,23 @@ require("lazy").setup({
         automatic_installation = true,
       })
 
-      local capabilities = require("cmp_nvim_lsp").default_capabilities()
-      local lspconfig = require("lspconfig")
+      local mason_registry = require("mason-registry")
+      if not mason_registry.is_installed("clang-format") then
+        vim.cmd("MasonInstall clang-format")
+      end
 
+      local lspconfig = require("lspconfig")
       lspconfig.lua_ls.setup({})
+
+      local capabilities = require("cmp_nvim_lsp").default_capabilities()
       lspconfig.clangd.setup({
         capabilities = capabilities,
         cmd = {
           "clangd",
           "--background-index",
           "--clang-tidy",
+          "--clang-tidy-checks=readability-*,modernize-*,-modernize-use-trailing-return-type",
+          "--fallback-style=file",
           "--header-insertion=never",
           "--compile-commands-dir=.",
           "--query-driver=**",
@@ -139,10 +147,18 @@ require("lazy").setup({
         init_options = {
           fallbackFlags = { "-std=c11", "-D_POSIX_C_SOURCE=200809L", "-D_GNU_SOURCE", "-x", "c" },
           compilationDatabasePath = ".",
-          formatting = {
-            insertFinalNewline = true
-          }
         }
+      })
+
+      require("conform").setup({
+        formatters_by_ft = {
+          c = { "clang_format" },
+          h = { "clang_format" },
+        },
+        format_on_save = {
+          timeout_ms = 500,
+          lsp_fallback = true,
+        },
       })
 
       vim.keymap.set('n', '<leader>m', vim.diagnostic.goto_next)
@@ -160,13 +176,13 @@ require("lazy").setup({
           vim.keymap.set('n', '<leader>r', vim.lsp.buf.rename, opts)
           vim.keymap.set('n', '<C-.>', vim.lsp.buf.code_action, opts)
           vim.keymap.set('n', '<C-f>', function()
-            vim.lsp.buf.format { async = true }
+            require("conform").format({ async = true })
           end, opts)
 
           vim.api.nvim_create_autocmd("BufWritePre", {
             buffer = args.buf,
             callback = function()
-              vim.lsp.buf.format({ buffer = args.buf, id = client.id })
+              require("conform").format({ async = true, buffer = args.buf, id = client.id })
             end,
           })
         end,

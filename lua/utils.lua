@@ -153,6 +153,9 @@ function CreateCowsay()
   local prog_config = CenterText("[p] Programming   [c] Config", width + #left_pad_spaces)
   table.insert(cowsay, prog_config)
   table.insert(cowsay, "")
+
+  local formattedDate = CenterText(os.date("%I:%M %p | %d-%m-%Y"), width + #left_pad_spaces)
+  table.insert(cowsay, 1, formattedDate)
   return cowsay
 end
 

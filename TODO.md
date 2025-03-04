@@ -16,22 +16,24 @@
 [x] - Learn TeleScope
 [x] - Fix terminal opening on different places
 [x] - Learn Tutor
+[x] - Show diagnostic errors faster (maybe on char change instead of file save)
+[x] - Better clang formatting
 [ ] - Watch you can do *almost* everything without plugins
 [ ] - Get better with replacing
 [ ] - Learn how to uppercase/lowercase
 [ ] - Learn macros/recording
 
 ## Motions Notes
-- `<C-o>` - For previous place where the cursor was at
-- `<C-i>` - For next place where the cursor was at
-- `<C-v>$A` - For appending at the end
-- `<C-v>^i` - For inserting at the start
-- `csw{[` - For changing from `{}` to `[]`
-- `sw{` - For adding `[]`
-- `v{` - For adding `{}`
-- `t` - Is for HTML tags
-- `<S-v> g <C-a>` - To increment
-- `:s/old/new/g` - For replacing all instances of a text
-- `:s/\(.*\) \1` - WTF
-- `va{V` - Change muscle memory for selecting function
-- `gx` - Open URL on browser
+[x] - `<C-o>` For previous place where the cursor was at
+[ ] - `<C-i>` For next place where the cursor was at
+[x] - `<C-v>$A` For appending at the end
+[x] - `<C-v>I` For inserting at the start
+[ ] - `csw{[` For changing from `{}` to `[]`
+[ ] - `sw{` For adding `[]`
+[ ] - `v{` For adding `{}`
+[ ] - `t` Is for HTML tags
+[ ] - `<S-v> g <C-a>` To increment
+[x] - `:s/old/new/g` For replacing all instances of a text
+[ ] - `:s/\(.*\) \1` WTF
+[ ] - `va{V` Change muscle memory for selecting function
+[ ] - `gx` Open URL on browser

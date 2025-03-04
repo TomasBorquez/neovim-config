@@ -13,3 +13,12 @@ vim.opt.expandtab = true
 vim.opt.signcolumn = "yes"
 vim.opt.swapfile = false
 vim.opt.wrap = false
+vim.opt.updatetime = 300
+
+vim.diagnostic.config({
+  update_in_insert = true, -- Show diagnostics while in insert mode
+  virtual_text = true,     -- Show virtual text
+  signs = true,            -- Show signs
+  underline = true,        -- Underline the text
+  severity_sort = true,    -- Sort by severity
+})
