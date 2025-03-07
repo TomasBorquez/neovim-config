@@ -17,7 +17,6 @@ function GetBufferDir()
   end
 
   local current_buffer_dir = vim.fn.expand('%:p:h')
-
   local git_root = vim.fn.systemlist('git -C ' .. vim.fn.shellescape(current_buffer_dir) .. ' rev-parse --show-toplevel')
       [1]
 

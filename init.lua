@@ -175,16 +175,6 @@ require("lazy").setup({
           vim.keymap.set('n', 'gh', vim.lsp.buf.hover, opts)
           vim.keymap.set('n', '<leader>r', vim.lsp.buf.rename, opts)
           vim.keymap.set('n', '<C-.>', vim.lsp.buf.code_action, opts)
-          vim.keymap.set('n', '<C-f>', function()
-            require("conform").format({ async = true })
-          end, opts)
-
-          vim.api.nvim_create_autocmd("BufWritePre", {
-            buffer = args.buf,
-            callback = function()
-              require("conform").format({ async = true, buffer = args.buf, id = client.id })
-            end,
-          })
         end,
       })
 
