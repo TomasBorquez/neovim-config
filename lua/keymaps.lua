@@ -35,3 +35,5 @@ vim.keymap.set("n", "<leader>so", function()
   vim.cmd("redir END")
   print("Output saved to output.txt")
 end, { desc = "Output lua file to text file" })
+
+vim.keymap.set('n', '<leader>bo', '<cmd>silent! %bd|e#|bd#<cr>', { desc = "Close all buffers except current" })

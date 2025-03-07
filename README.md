@@ -17,7 +17,7 @@ need to update something.
 
 ## TODOS
 - [x] Create a commands file
-- [x] Get diferent color each month for cowsay
+- [x] Get different color each month for cowsay
 - [x] Get random quote each day for cow say
 - [x] Center cow and quotes
 - [x] Unbind oil.nvim keybinds
@@ -36,14 +36,15 @@ need to update something.
 - [x] Show diagnostic errors faster (maybe on char change instead of file save)
 - [x] Better clang formatting
 - [x] Learn how to uppercase/lowercase
+- [x] Learn macros/recording
+- [x] Read advanced cheat sheet
+- [x] Shortcut to close all nvim buffers expect current one
 - [ ] Watch you can do *almost* everything without plugins
-- [ ] Get better with replacing
-- [ ] Learn macros/recording
-- [ ] Read advanced cheatsheet
+- [ ] Get better with substitute
 - [ ] If TeleScope ever gets slow, add `telescope-fzf-native.nvim`
 
 ## Motions Notes
-- [x] `<C-o>` For previous place where the cursor was at
+- [x] `<C-o>` For previous place where the cursor was at 
 - [x] `<C-i>` For next place where the cursor was at
 - [x] `<C-v>$A` For appending at the end
 - [x] `<C-v>I` For inserting at the start
@@ -53,7 +54,17 @@ need to update something.
 - [x] `~` To invert casing
 - [x] `<C-a>` To increment
 - [x] `<C-v> g <C-a>` To increment
-- [x] `:s/old/new/g` For replacing all instances of a text
-- [ ] `:s/\(.*\) \1` WTF
 - [ ] `va{V` Change muscle memory for selecting function
 - [ ] `gx` Open URL on browser
+- [ ] `gf` Open buffer on location 
+- [x] `:s/old/new/g` For replacing all instances of a text
+- [ ] `:s/\(.*\) \1` WTF?
+- [x] `:set spell!` Toggle spellcheck
+- [ ] `z=` Spell suggestions
+- [ ] `1z=` First spell suggestion
+- [ ] `zg` Marks word as good
+- [ ] `zb` Marks word as bad
+- [ ] `*` Search for word under the cursor
+- [x] `qa` To start recording `q` to stop, and `@@` to execute last macro
+- [ ] `q:` Open command line history
+- [ ] `q/` Open search history
