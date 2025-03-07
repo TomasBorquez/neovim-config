@@ -41,6 +41,7 @@ Versions:
 [ ] - Get better with replacing
 [ ] - Learn macros/recording
 [ ] - Read advanced cheatsheet
+[ ] - If TeleScope ever gets slow, add `telescope-fzf-native.nvim`
 
 ## Motions Notes
 [x] - `<C-o>` For previous place where the cursor was at
