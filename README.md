@@ -10,8 +10,7 @@ The current version of my editor works very well with very little/no bugs, so I'
 I've already installed, even if they come with flashy new features or whatever, they will stay the same unless I REALLY
 need to update something. 
 
-Versions:
-
+**Versions**:
 - Neovim 0.10
 - Neovide 0.14.1
 - Windows 11
