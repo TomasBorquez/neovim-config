@@ -1,5 +1,7 @@
 vim.o.guifont = "Comic Mono:h13:#e-subpixelantialias"
+-- vim.o.guifont = "Comic Mono:h18:#e-subpixelantialias"
 vim.g.mapleader = " "
+vim.g.c_syntax_for_h = 1 -- Detect .h files
 vim.opt.number = true
 vim.opt.relativenumber = true
 vim.opt.ignorecase = true

@@ -47,16 +47,30 @@ require("lazy").setup({
   },
   {
     "nvim-telescope/telescope.nvim",
-    dependencies = { "nvim-lua/plenary.nvim" },
+    dependencies = {
+      { "nvim-lua/plenary.nvim" },
+      { "nvim-telescope/telescope-fzf-native.nvim", build = "cmake -S. -Bbuild -DCMAKE_BUILD_TYPE=Release && cmake --build build --config Release" }
+    },
     config = function()
       local telescope_builtin = require("telescope.builtin")
 
-      vim.keymap.set('n', '<C-p>', function()
+      vim.keymap.set('n', '<Leader>f', function()
         telescope_builtin.find_files({ cwd = GetBufferDir() })
       end)
-      vim.keymap.set('n', '<C-S-f>', function()
+      vim.keymap.set('n', '<Leader>g', function()
         telescope_builtin.live_grep({ cwd = GetBufferDir() })
       end)
+
+      require('telescope').setup({
+        extensions = {
+          fzf = {
+            fuzzy = true,
+            override_generic_sorter = true,
+            override_file_sorter = true,
+            case_mode = "smart_case",
+          }
+        }
+      })
     end
   },
   {
@@ -197,19 +211,17 @@ require("lazy").setup({
           ['<C-Space>'] = cmp.mapping.complete(),
           ['<C-e>'] = cmp.mapping.abort(),
           ['<CR>'] = cmp.mapping.confirm({ select = true }),
+          ['<C-n>'] = cmp.mapping.select_next_item(),
+          ['<C-p>'] = cmp.mapping.select_prev_item(),
           ['<Tab>'] = cmp.mapping(function(fallback)
-            if cmp.visible() then
-              cmp.select_next_item()
-            elseif ls.expand_or_jumpable() then
+            if ls.expand_or_jumpable() then
               ls.expand_or_jump()
             else
               fallback()
             end
           end, { 'i', 's' }),
           ['<S-Tab>'] = cmp.mapping(function(fallback)
-            if cmp.visible() then
-              cmp.select_prev_item()
-            elseif ls.jumpable(-1) then
+            if ls.jumpable(-1) then
               ls.jump(-1)
             else
               fallback()
@@ -232,7 +244,7 @@ require("lazy").setup({
     opts = {
       direction = "float",
       close_on_exit = true,
-      shell = "cmd.exe /c \"\"C:\\Program Files\\Git\\bin\\bash.exe\" --login -i\"",
+      shell = 'cmd.exe /k "set CHERE_INVOKING=1 && set MSYSTEM=MINGW64 && C:\\msys64\\usr\\bin\\bash.exe --login -i"',
       float_opts = {
         border = "curved",
         winblend = 0,
@@ -247,6 +259,7 @@ require("lazy").setup({
       local toggleterm = require("toggleterm")
       toggleterm.setup(opts)
 
+      vim.keymap.set("n", "<C-`>", "<CMD>ToggleTerm dir=%:p:h<CR>", { desc = "Open file explorer" })
       function _G.set_terminal_keymaps()
         opts = { noremap = true }
         vim.api.nvim_buf_set_keymap(0, 't', '<C-`>', [[<cmd>q<CR>]], opts)
@@ -263,8 +276,8 @@ require("lazy").setup({
   },
   {
     "mhinz/vim-startify",
-    lazy = false,    -- Load at startup
-    priority = 1000, -- High priority to load early
+    lazy = false,
+    priority = 1000,
     config = function()
       vim.g.startify_custom_header = CreateCowsay()
 

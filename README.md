@@ -39,9 +39,15 @@ need to update something.
 - [x] Learn macros/recording
 - [x] Read advanced cheat sheet
 - [x] Shortcut to close all nvim buffers expect current one
+- [x] Change eventually to <C-p> and <C-n> for suggestions 
+- [x] Move TeleScope shortcut, also learn how to close it
+- [x] Add `telescope-fzf-native.nvim`
+- [x] Fix the insert after comment thing that makes it annoying to type
+- [x] Figure out why copy lags out
+- [x] Fix Clangd not working on .h files
+- [ ] Make terminal *cwd* equal to what `oil.nvim` has as *cwd*
 - [ ] Watch you can do *almost* everything without plugins
 - [ ] Get better with substitute
-- [ ] If TeleScope ever gets slow, add `telescope-fzf-native.nvim`
 
 ## Motions Notes
 - [x] `<C-o>` For previous place where the cursor was at 
@@ -49,12 +55,12 @@ need to update something.
 - [x] `<C-v>$A` For appending at the end
 - [x] `<C-v>I` For inserting at the start
 - [x] `vw}` For adding `{}`
-- [ ] `cs{[` For changing from `{}` to `[]`
-- [ ] `t` Is for HTML tags
+- [x] `cs{[` For changing from `{}` to `[]`
+- [x] `gu` To lowercase
+- [x] `gU` To uppercase
 - [x] `~` To invert casing
 - [x] `<C-a>` To increment
 - [x] `<C-v> g <C-a>` To increment
-- [ ] `va{V` Change muscle memory for selecting function
 - [ ] `gx` Open URL on browser
 - [ ] `gf` Open buffer on location 
 - [x] `:s/old/new/g` For replacing all instances of a text
@@ -64,7 +70,7 @@ need to update something.
 - [ ] `1z=` First spell suggestion
 - [ ] `zg` Marks word as good
 - [ ] `zb` Marks word as bad
-- [ ] `*` Search for word under the cursor
+- [x] `*` Search for word under the cursor
 - [x] `qa` To start recording `q` to stop, and `@@` to execute last macro
 - [ ] `q:` Open command line history
 - [ ] `q/` Open search history
