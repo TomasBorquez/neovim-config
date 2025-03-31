@@ -74,3 +74,5 @@ need to update something.
 - [x] `qa` To start recording `q` to stop, and `@@` to execute last macro
 - [ ] `q:` Open command line history
 - [ ] `q/` Open search history
+- [ ] Add command copy to a register guide
+- [ ] `<C-d>` to quit gdb

@@ -21,10 +21,9 @@ require("lazy").setup({
     "sainnhe/gruvbox-material",
     priority = 1000,
     config = function()
-      vim.g.gruvbox_material_background = "medium"
-      vim.g.gruvbox_material_ui_contrast = "high"
       vim.g.gruvbox_material_better_performance = 1
       vim.g.gruvbox_material_disable_italic_comment = 1
+      vim.g.gruvbox_material_background = "hard"
       vim.cmd.colorscheme("gruvbox-material")
 
       vim.cmd([[

@@ -44,3 +44,11 @@ end, { desc = "Output lua file to text file" })
 vim.keymap.set('n', '<leader>bo', '<cmd>silent! %bd|e#|bd#<cr>', { desc = "Close all buffers except current" })
 
 vim.keymap.set('n', '<F5>', '<CMD>LspRestart<CR>', { desc = 'Restart LSP server' })
+
+if vim.g.neovide == true then
+  pcall(function() vim.keymap.del("n", "<C-^>") end)
+  vim.api.nvim_set_keymap("n", "<C-^>",
+    ":lua vim.g.neovide_scale_factor = vim.g.neovide_scale_factor + 0.1<CR>", { silent = true })
+  vim.api.nvim_set_keymap("n", "<C-->",
+    ":lua vim.g.neovide_scale_factor = vim.g.neovide_scale_factor - 0.1<CR>", { silent = true })
+end
