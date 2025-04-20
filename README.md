@@ -61,7 +61,7 @@ need to update something.
 - [x] `~` To invert casing
 - [x] `<C-a>` To increment
 - [x] `<C-v> g <C-a>` To increment
-- [ ] `gx` Open URL on browser
+- [x] `gx` Open URL on browser
 - [ ] `gf` Open buffer on location 
 - [x] `:s/old/new/g` For replacing all instances of a text
 - [ ] `:s/\(.*\) \1` WTF?
@@ -74,5 +74,5 @@ need to update something.
 - [x] `qa` To start recording `q` to stop, and `@@` to execute last macro
 - [ ] `q:` Open command line history
 - [ ] `q/` Open search history
-- [ ] Add command copy to a register guide
-- [ ] `<C-d>` to quit gdb
+- [x] `<C-d>` to quit gdb
+- [ ] `<Leader-so>` to copy command output

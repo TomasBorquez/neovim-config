@@ -23,7 +23,6 @@ require("lazy").setup({
     config = function()
       vim.g.gruvbox_material_better_performance = 1
       vim.g.gruvbox_material_disable_italic_comment = 1
-      vim.g.gruvbox_material_background = "hard"
       vim.cmd.colorscheme("gruvbox-material")
 
       vim.cmd([[
@@ -345,5 +344,12 @@ require("lazy").setup({
       })
     end
   },
+  {
+    "folke/todo-comments.nvim",
+    dependencies = { "nvim-lua/plenary.nvim" },
+    opts = {
+      signs = false,
+    }
+  }
 })
 require('commands')
