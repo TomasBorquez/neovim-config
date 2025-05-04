@@ -6,14 +6,36 @@ function GetDay()
   return daysDiff + 1
 end
 
+function NormalizePath(path)
+  return path:gsub('\\', '/')
+end
+
+function Cwd()
+  local oil_dir = require("oil").get_current_dir()
+  if oil_dir then
+    return NormalizePath(oil_dir)
+  end
+
+  local current_buf = vim.api.nvim_get_current_buf()
+  local buf_name = vim.api.nvim_buf_get_name(current_buf)
+  local path = vim.fn.expand('%:p:h')
+
+  if buf_name:match("^term://") and path:match("^term://") then
+    return nil
+  end
+
+  return NormalizePath(path)
+end
+
 function GetPath(path)
   local script_path = debug.getinfo(1).source:match("@?(.*/)") or ""
   return script_path .. path
 end
 
 function GetBufferDir()
-  if not vim.fn or not vim.fn.expand or not vim.fn.systemlist then
-    return nil
+  local path = Cwd()
+  if path then
+    return path
   end
 
   local current_buffer_dir = vim.fn.expand('%:p:h')
