@@ -41,7 +41,26 @@ require("lazy").setup({
   },
   {
     "nvim-treesitter/nvim-treesitter",
-    build = ":TSUpdate"
+    build = ":TSUpdate",
+    config = function()
+      require('nvim-treesitter.configs').setup({
+        modules = {},
+        sync_install = false,
+        auto_install = false,
+        ignore_install = {},
+        parser_install_dir = nil,
+        ensure_installed = { "glsl" },
+        highlight = {
+          enable = true,
+        },
+        indent = {
+          enable = true,
+        },
+        incremental_selection = {
+          enable = true,
+        },
+      })
+    end,
   },
   {
     "nvim-telescope/telescope.nvim",
@@ -130,7 +149,7 @@ require("lazy").setup({
     config = function()
       require("mason").setup()
       require("mason-lspconfig").setup({
-        ensure_installed = { "lua_ls", "clangd" },
+        ensure_installed = { "lua_ls", "clangd", "glsl_analyzer" },
         automatic_installation = true,
       })
 
@@ -139,9 +158,11 @@ require("lazy").setup({
         vim.cmd("MasonInstall clang-format")
       end
 
+      -- NOTE: Lua LSP
       local lspconfig = require("lspconfig")
       lspconfig.lua_ls.setup({})
 
+      -- NOTE: Clangd LSP
       local capabilities = require("cmp_nvim_lsp").default_capabilities()
       lspconfig.clangd.setup({
         capabilities = capabilities,
@@ -166,6 +187,7 @@ require("lazy").setup({
         formatters_by_ft = {
           c = { "clang_format" },
           h = { "clang_format" },
+          glsl = { "clang_format" },
         },
         format_on_save = {
           timeout_ms = 500,
@@ -173,8 +195,21 @@ require("lazy").setup({
         },
       })
 
-      vim.keymap.set('n', '<leader>m', vim.diagnostic.goto_next)
+      -- NOTE: GLSL Analyzer
+      lspconfig.glsl_analyzer.setup({
+        capabilities = require("cmp_nvim_lsp").default_capabilities(),
+        filetypes = { "glsl", "vert", "frag", "geom" },
+      })
 
+      vim.api.nvim_create_autocmd({ "BufRead", "BufNewFile" }, {
+        pattern = { "*.glsl", "*.vert", "*.frag", "*.geom" },
+        callback = function()
+          vim.bo.filetype = "glsl"
+        end,
+      })
+
+      -- NOTE: Binds
+      vim.keymap.set('n', '<leader>m', vim.diagnostic.goto_next)
       vim.api.nvim_create_autocmd('LspAttach', {
         group = vim.api.nvim_create_augroup('UserLspConfig', {}),
         callback = function(args)
@@ -190,7 +225,7 @@ require("lazy").setup({
         end,
       })
 
-      local cmp = require("cmp")
+      -- NOTE: LuaSnip
       local ls = require("luasnip")
 
       ls.config.set_config({
@@ -199,7 +234,17 @@ require("lazy").setup({
         enable_autosnippets = true,
       })
 
+      -- NOTE: CMP
+      local cmp = require("cmp")
       cmp.setup({
+        performance = {
+          debounce = 60,
+          throttle = 30,
+          async_budget = 1,
+          fetching_timeout = 500,
+          confirm_resolve_timeout = 80,
+          max_view_entries = 10,
+        },
         snippet = {
           expand = function(args)
             ls.lsp_expand(args.body)
@@ -257,12 +302,16 @@ require("lazy").setup({
       local toggleterm = require("toggleterm")
       toggleterm.setup(opts)
 
-      vim.keymap.set("n", "<C-`>", "<CMD>ToggleTerm dir=%:p:h<CR>", { desc = "Open file explorer" })
+      vim.keymap.set("n", "<C-`>", function()
+        vim.cmd(string.format('ToggleTerm dir=%s', Cwd()))
+      end, { desc = "Open terminal in current directory" })
+
       function _G.set_terminal_keymaps()
-        opts = { noremap = true }
-        vim.api.nvim_buf_set_keymap(0, 't', '<C-`>', [[<cmd>q<CR>]], opts)
-        vim.api.nvim_buf_set_keymap(0, 't', '<Esc>', [[<C-\><C-n>]], opts)
-        vim.api.nvim_buf_set_keymap(0, 't', '<C-v>', [[<C-\><C-n>"+pa]], opts)
+        local keymap_opts = { noremap = true }
+        vim.api.nvim_buf_set_keymap(0, 't', '<C-d>', [[<cmd>q!<CR>]], keymap_opts)
+        vim.api.nvim_buf_set_keymap(0, 't', '<C-`>', [[<cmd>q<CR>]], keymap_opts)
+        vim.api.nvim_buf_set_keymap(0, 't', '<Esc>', [[<C-\><C-n>]], keymap_opts)
+        vim.api.nvim_buf_set_keymap(0, 't', '<C-v>', [[<C-\><C-n>"+pa]], keymap_opts)
       end
 
       vim.cmd('autocmd! TermOpen term://* lua set_terminal_keymaps()')
@@ -350,6 +399,7 @@ require("lazy").setup({
     opts = {
       signs = false,
     }
-  }
+  },
+  { 'wakatime/vim-wakatime', lazy = false }
 })
 require('commands')

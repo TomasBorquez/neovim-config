@@ -20,6 +20,7 @@ vim.api.nvim_create_autocmd('BufWinEnter', {
 })
 
 -- User Commands
+vim.api.nvim_create_user_command('Shada', ':Oil ~/AppData/Local/nvim-data/shada', {})
 vim.api.nvim_create_user_command('Config', ':Oil ~/AppData/Local/nvim/', {})
 vim.api.nvim_create_user_command('Programming', ':Oil ~/Desktop/Programming/', {})
 vim.api.nvim_create_user_command('Home', 'Startify', {})

@@ -45,8 +45,11 @@ need to update something.
 - [x] Fix the insert after comment thing that makes it annoying to type
 - [x] Figure out why copy lags out
 - [x] Fix Clangd not working on .h files
-- [ ] Make terminal *cwd* equal to what `oil.nvim` has as *cwd*
-- [ ] Watch you can do *almost* everything without plugins
+- [x] Add GLSL LSP
+- [x] Fix TreeSitter
+- [x] Lower amount of recommendations `nvim-cmp`
+- [x] Make terminal *cwd* equal to what `oil.nvim` has as *cwd*
+- [ ] Watch "You can do *almost* everything without plugins"
 - [ ] Get better with substitute
 
 ## Motions Notes
@@ -62,17 +65,11 @@ need to update something.
 - [x] `<C-a>` To increment
 - [x] `<C-v> g <C-a>` To increment
 - [x] `gx` Open URL on browser
-- [ ] `gf` Open buffer on location 
+- [x] `gf` Open buffer on location 
 - [x] `:s/old/new/g` For replacing all instances of a text
-- [ ] `:s/\(.*\) \1` WTF?
 - [x] `:set spell!` Toggle spellcheck
-- [ ] `z=` Spell suggestions
-- [ ] `1z=` First spell suggestion
-- [ ] `zg` Marks word as good
-- [ ] `zb` Marks word as bad
 - [x] `*` Search for word under the cursor
 - [x] `qa` To start recording `q` to stop, and `@@` to execute last macro
-- [ ] `q:` Open command line history
-- [ ] `q/` Open search history
 - [x] `<C-d>` to quit gdb
+- [ ] `:s/\(.*\) \1` WTF?
 - [ ] `<Leader-so>` to copy command output
