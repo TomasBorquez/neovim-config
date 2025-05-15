@@ -72,10 +72,10 @@ require("lazy").setup({
       local telescope_builtin = require("telescope.builtin")
 
       vim.keymap.set('n', '<Leader>f', function()
-        telescope_builtin.find_files({ cwd = GetBufferDir() })
+        telescope_builtin.find_files({ cwd = GetTelescopeDir() })
       end)
       vim.keymap.set('n', '<Leader>g', function()
-        telescope_builtin.live_grep({ cwd = GetBufferDir() })
+        telescope_builtin.live_grep({ cwd = GetTelescopeDir() })
       end)
 
       require('telescope').setup({

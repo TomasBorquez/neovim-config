@@ -49,6 +49,21 @@ function GetBufferDir()
   return current_buffer_dir
 end
 
+function GetTelescopeDir()
+  local path = Cwd()
+  if path == nil then
+    path = vim.fn.expand('%:p:h')
+  end
+
+  local git_root = vim.fn.systemlist('git -C ' .. vim.fn.shellescape(path) .. ' rev-parse --show-toplevel')
+      [1]
+  if vim.v.shell_error == 0 and git_root then
+    return git_root
+  end
+
+  return path
+end
+
 local function get_dad_joke()
   local file = io.open(GetPath("../data/dad-jokes.txt"), "r")
   if not file then
