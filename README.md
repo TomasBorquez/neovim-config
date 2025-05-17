@@ -71,5 +71,7 @@ need to update something.
 - [x] `*` Search for word under the cursor
 - [x] `qa` To start recording `q` to stop, and `@@` to execute last macro
 - [x] `<C-d>` to quit gdb
+- [ ] `:s/old/new/gc` For replacing all instances of a text with confirmation `y`, `n`, `a` `q`
 - [ ] `:s/\(.*\) \1` WTF?
 - [ ] `<Leader-so>` to copy command output
+
