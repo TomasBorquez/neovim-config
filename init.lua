@@ -26,16 +26,20 @@ require("lazy").setup({
       vim.cmd.colorscheme("gruvbox-material")
 
       vim.cmd([[
+        highlight FloatShadow gui=NONE
         highlight MatchParen guibg=#504945 gui=NONE guisp=NONE
-        highlight Normal guibg=#0A0A0A
-        highlight NormalFloat guibg=#060606
-        highlight StatusLine guibg=#070707
-        highlight CursorLine guibg=#080808
-        highlight FloatBorder guibg=#060606
-        highlight FloatShadow gui=NONE guibg=#060606
-        highlight Pmenu guibg=#060606
-        highlight TelescopeNormal guibg=#060606
-        highlight TelescopeBorder guibg=#060606
+
+        highlight Normal guibg=#121212
+        highlight StatusLine guibg=#0D0D0D
+
+        highlight TelescopeNormal guibg=#0F0F0F
+        highlight TelescopeBorder guibg=#0F0F0F
+
+        highlight Pmenu guibg=#0D0D0D
+        highlight NormalFloat guibg=#0D0D0D
+        highlight CursorLine guibg=#0D0D0D
+
+        highlight FloatBorder guibg=#0B0B0B
       ]])
     end,
   },
