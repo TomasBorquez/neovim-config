@@ -404,6 +404,198 @@ require("lazy").setup({
       signs = false,
     }
   },
-  { 'wakatime/vim-wakatime', lazy = false }
+  { 'wakatime/vim-wakatime', lazy = false },
+  {
+    "mfussenegger/nvim-dap",
+    event = "VeryLazy",
+    dependencies = {
+      "rcarriga/nvim-dap-ui",
+      "nvim-neotest/nvim-nio",
+      "jay-babu/mason-nvim-dap.nvim",
+      "theHamsta/nvim-dap-virtual-text",
+    },
+    config = function()
+      local mason_dap = require("mason-nvim-dap")
+      local dap = require("dap")
+      local ui = require("dapui")
+      local dap_virtual_text = require("nvim-dap-virtual-text")
+
+      -- Dap Virtual Text
+      dap_virtual_text.setup()
+
+      mason_dap.setup({
+        ensure_installed = { "cppdbg" },
+        automatic_installation = true,
+        handlers = {
+          function(config)
+            require("mason-nvim-dap").default_setup(config)
+          end,
+        },
+      })
+
+      -- Configurations
+      dap.configurations = {
+        c = {
+          {
+            name = "Launch file",
+            type = "cppdbg",
+            request = "launch",
+            program = function()
+              return GetTelescopeDir() .. "/build/main.exe"
+            end,
+            cwd = "${workspaceFolder}",
+            stopAtEntry = true,
+            MIMode = "gdb",
+            miDebuggerPath = "gdb",
+            setupCommands = {
+              {
+                description = "Enable pretty-printing for gdb",
+                text = "-enable-pretty-printing",
+                ignoreFailures = true
+              }
+            }
+          },
+          {
+            name = "Launch file (custom path)",
+            type = "cppdbg",
+            request = "launch",
+            program = function()
+              return vim.fn.input("Path to executable: ", Cwd() .. "/", "file")
+            end,
+            cwd = "${workspaceFolder}",
+            stopAtEntry = true,
+            MIMode = "gdb",
+            miDebuggerPath = "gdb",
+            setupCommands = {
+              {
+                description = "Enable pretty-printing for gdb",
+                text = "-enable-pretty-printing",
+                ignoreFailures = true
+              }
+            }
+          }
+        },
+      }
+
+      -- Disable launch.json
+      local vscode = require('dap.ext.vscode')
+      vscode._load_json = function() return {} end
+
+      -- Dap UI
+      ui.setup({
+        icons = {
+          expanded = "▾",
+          collapsed = "▸",
+          current_frame = "▸"
+        },
+        mappings = {
+          expand = { "<CR>", "<2-LeftMouse>" },
+          open = "o",
+          remove = "d",
+          edit = "e",
+          repl = "r",
+          toggle = "t",
+        },
+        element_mappings = {},
+        expand_lines = true,
+        force_buffers = true,
+        layouts = {
+          {
+            elements = {
+              { id = "scopes",      size = 0.425 },
+              { id = "stacks",      size = 0.425 },
+              { id = "breakpoints", size = 0.15 },
+            },
+            size = 40,
+            position = "left",
+          },
+        },
+        floating = {
+          max_height = nil,
+          max_width = nil,
+          border = "single",
+          mappings = {
+            close = { "q", "<Esc>" },
+          },
+        },
+        controls = {
+          enabled = false, -- This disables the controls panel
+          element = "repl",
+          icons = {
+            pause = "⏸",
+            play = ">",
+            step_into = "⏎",
+            step_over = "⏭",
+            step_out = "⏮",
+            step_back = "b",
+            run_last = "▶▶",
+            terminate = "⏹",
+            disconnect = "⏏",
+          },
+        },
+        render = {
+          max_type_length = nil,
+          max_value_lines = 100,
+          indent = 1,
+        },
+      })
+
+      vim.fn.sign_define('DapBreakpoint', {
+        text = 'B',
+        texthl = 'DapBreakpoint',
+        linehl = '',
+        numhl = ''
+      })
+
+      vim.fn.sign_define('DapStopped', {
+        text = '>',
+        texthl = 'DapStopped',
+        linehl = 'DapStoppedLine',
+        numhl = ''
+      })
+
+      vim.cmd [[
+        highlight DapBreakpoint guifg=#e06c75 ctermfg=203
+        highlight DapBreakpointCondition guifg=#e06c75 ctermfg=203
+        highlight DapStopped guifg=#98c379 ctermfg=114
+        highlight DapStoppedLine guibg=#2d3748 ctermbg=238
+      ]]
+
+      dap.listeners.before.attach.dapui_config = function()
+        ui.open()
+      end
+      dap.listeners.before.launch.dapui_config = function()
+        ui.open()
+      end
+      dap.listeners.before.event_terminated.dapui_config = function()
+        ui.close()
+      end
+      dap.listeners.before.event_exited.dapui_config = function()
+        ui.close()
+      end
+      dap.listeners.after.disconnect.dapui_config = function()
+        ui.close()
+      end
+
+      -- Keymaps
+      vim.keymap.set("n", "<leader>b", dap.toggle_breakpoint)
+
+      vim.keymap.set("n", "<leader>dr", function()
+        dap.toggle_breakpoint()
+        dap.continue()
+      end)
+
+      vim.keymap.set("n", "<leader>dn", dap.continue)
+      vim.keymap.set("n", "<leader>di", dap.step_into)
+      vim.keymap.set("n", "<leader>do", dap.step_over)
+      vim.keymap.set("n", "<leader>du", dap.step_out)
+
+      vim.keymap.set("n", "<leader>dq", function()
+        dap.terminate()
+        ui.close()
+        dap.close()
+      end)
+    end,
+  },
 })
 require('commands')

@@ -32,6 +32,7 @@
 - [x] Fix TreeSitter
 - [x] Lower amount of recommendations `nvim-cmp`
 - [x] Make terminal *cwd* equal to what `oil.nvim` has as *cwd*
+- [x] Add debugger support for `ggdb`
 - [ ] Watch "You can do *almost* everything without plugins"
 - [ ] Get better with substitute
 
@@ -54,6 +55,6 @@
 - [x] `*` Search for word under the cursor
 - [x] `qa` To start recording `q` to stop, and `@@` to execute last macro
 - [x] `<C-d>` to quit gdb
+- [x] `<Leader-sm>` to copy command output
 - [ ] `:s/old/new/gc` For replacing all instances of a text with confirmation `y`, `n`, `a` `q`
 - [ ] `:s/\(.*\) \1` WTF?
-- [ ] `<Leader-so>` to copy command output
