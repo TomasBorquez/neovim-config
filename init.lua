@@ -444,7 +444,7 @@ require("lazy").setup({
               return GetTelescopeDir() .. "/build/main.exe"
             end,
             cwd = "${workspaceFolder}",
-            stopAtEntry = true,
+            stopAtEntry = false,
             MIMode = "gdb",
             miDebuggerPath = "gdb",
             setupCommands = {
@@ -463,7 +463,7 @@ require("lazy").setup({
               return vim.fn.input("Path to executable: ", Cwd() .. "/", "file")
             end,
             cwd = "${workspaceFolder}",
-            stopAtEntry = true,
+            stopAtEntry = false,
             MIMode = "gdb",
             miDebuggerPath = "gdb",
             setupCommands = {
