@@ -1,0 +1,59 @@
+## TODOS
+- [x] Create a commands file
+- [x] Get different color each month for cowsay
+- [x] Get random quote each day for cow say
+- [x] Center cow and quotes
+- [x] Unbind oil.nvim keybinds
+- [x] Paste in terminal
+- [x] Find how to get in vim mode in terminal and how to get out of it
+- [x] Source current file so I don't have to restart
+- [x] Find out why is it pasting by default and making it all a comment
+- [x] Format on save
+- [x] Learn to use <C-v>
+- [x] Add VimSurround 
+- [x] Learn VimSurround
+- [x] Remove wrap
+- [x] Learn TeleScope
+- [x] Fix terminal opening on different places
+- [x] Learn Tutor
+- [x] Show diagnostic errors faster (maybe on char change instead of file save)
+- [x] Better clang formatting
+- [x] Learn how to uppercase/lowercase
+- [x] Learn macros/recording
+- [x] Read advanced cheat sheet
+- [x] Shortcut to close all nvim buffers expect current one
+- [x] Change eventually to <C-p> and <C-n> for suggestions 
+- [x] Move TeleScope shortcut, also learn how to close it
+- [x] Add `telescope-fzf-native.nvim`
+- [x] Fix the insert after comment thing that makes it annoying to type
+- [x] Figure out why copy lags out
+- [x] Fix Clangd not working on .h files
+- [x] Add GLSL LSP
+- [x] Fix TreeSitter
+- [x] Lower amount of recommendations `nvim-cmp`
+- [x] Make terminal *cwd* equal to what `oil.nvim` has as *cwd*
+- [ ] Watch "You can do *almost* everything without plugins"
+- [ ] Get better with substitute
+
+## Motions Notes
+- [x] `<C-o>` For previous place where the cursor was at 
+- [x] `<C-i>` For next place where the cursor was at
+- [x] `<C-v>$A` For appending at the end
+- [x] `<C-v>I` For inserting at the start
+- [x] `vw}` For adding `{}`
+- [x] `cs{[` For changing from `{}` to `[]`
+- [x] `gu` To lowercase
+- [x] `gU` To uppercase
+- [x] `~` To invert casing
+- [x] `<C-a>` To increment
+- [x] `<C-v> g <C-a>` To increment
+- [x] `gx` Open URL on browser
+- [x] `gf` Open buffer on location 
+- [x] `:s/old/new/g` For replacing all instances of a text
+- [x] `:set spell!` Toggle spellcheck
+- [x] `*` Search for word under the cursor
+- [x] `qa` To start recording `q` to stop, and `@@` to execute last macro
+- [x] `<C-d>` to quit gdb
+- [ ] `:s/old/new/gc` For replacing all instances of a text with confirmation `y`, `n`, `a` `q`
+- [ ] `:s/\(.*\) \1` WTF?
+- [ ] `<Leader-so>` to copy command output
