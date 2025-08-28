@@ -166,7 +166,7 @@ require("lazy").setup({
       local lspconfig = require("lspconfig")
       lspconfig.lua_ls.setup({})
 
-      -- NOTE: Clangd LSP
+      -- NOTE: Clangd LSP for C
       local capabilities = require("cmp_nvim_lsp").default_capabilities()
       lspconfig.clangd.setup({
         capabilities = capabilities,
@@ -174,17 +174,15 @@ require("lazy").setup({
           "clangd",
           "--background-index",
           "--clang-tidy",
-          "--clang-tidy-checks=readability-*,modernize-*,-modernize-use-trailing-return-type",
-          "--fallback-style=file",
           "--header-insertion=never",
           "--compile-commands-dir=.",
           "--query-driver=**",
         },
         filetypes = { "c", "h" },
         init_options = {
-          fallbackFlags = { "-std=c11", "-D_POSIX_C_SOURCE=200809L", "-D_GNU_SOURCE", "-x", "c" },
-          compilationDatabasePath = ".",
-        }
+          fallbackFlags = { "-std=c11" },
+          compilationDatabasePath = "./build",
+        },
       })
 
       require("conform").setup({

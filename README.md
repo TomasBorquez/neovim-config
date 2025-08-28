@@ -5,13 +5,12 @@ need to update something. In fact updating _usually_ breaks everything at the mo
 
 **Versions**:
 - Neovim 0.10
-- Neovide 0.14.1 (though it should work with other terminal emulators just fine)
 - Windows 11
 
 ## Philosophy
 Simplicity above all, meaning:
 - Just a few plugins (37 total)
-- Avoid modularizing and keep everything in one place.
+- Avoid modularizing and keep everything most in one place.
 - Edit config as little as possible (ideally once per year once stable).
 - Whenever I feel I need a plugin look for native alternatives, develop it myself or avoid temptation from the evil :)
 

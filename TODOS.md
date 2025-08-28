@@ -33,6 +33,8 @@
 - [x] Lower amount of recommendations `nvim-cmp`
 - [x] Make terminal *cwd* equal to what `oil.nvim` has as *cwd*
 - [x] Add debugger support for `ggdb`
+- [ ] Add spelling keybinds
+- [ ] Go back to 1 file expect utils
 - [ ] Watch "You can do *almost* everything without plugins"
 - [ ] Get better with substitute
 
@@ -53,8 +55,12 @@
 - [x] `:s/old/new/g` For replacing all instances of a text
 - [x] `:set spell!` Toggle spellcheck
 - [x] `*` Search for word under the cursor
-- [x] `qa` To start recording `q` to stop, and `@@` to execute last macro
+- [x] `qq` To start recording `q` to stop, and `@@` to execute last macro
 - [x] `<C-d>` to quit gdb
 - [x] `<Leader-sm>` to copy command output
-- [ ] `:s/old/new/gc` For replacing all instances of a text with confirmation `y`, `n`, `a` `q`
 - [ ] `:s/\(.*\) \1` WTF?
+Ergonomy - unbind native:
+- [ ] `<S-v>d` instead of `dd`
+- [ ] `<S-v>y` instead of `yy`
+- [ ] `go`     instead of `gg`
+

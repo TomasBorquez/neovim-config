@@ -102,12 +102,14 @@ function CenterText(text, width)
 end
 
 local function wrap_text(text, width)
-  local lines = {}
   local line = ""
+  local lines = {}
   local words = {}
+
   for word in text:gmatch("%S+") do
     table.insert(words, word)
   end
+
   for _, word in ipairs(words) do
     if #line + #word + 1 <= width then
       if #line > 0 then
@@ -120,9 +122,11 @@ local function wrap_text(text, width)
       line = word
     end
   end
+
   if #line > 0 then
     table.insert(lines, line)
   end
+
   return lines
 end
 
@@ -132,6 +136,8 @@ function CreateCowsay()
   local width = 60
   local setup = joke_parts[1]
   local punchline = joke_parts[2]
+  assert(#joke_parts == 2, "CreateCowsay: Failed, Setup/Punchline are not available, length should be 2")
+
   local left_pad_spaces = "    "
   local setup_lines = wrap_text(setup, width - #left_pad_spaces)
   local punchline_lines = wrap_text(punchline, width - #left_pad_spaces)
@@ -233,7 +239,7 @@ function SetDayColor()
 
     -- Winter in Argentina (June through August)
   elseif month >= 6 and month <= 8 then
-    color = "#5c6370" -- Gray blue for winter
+    color = "#7a8496" -- Gray blue for winter
 
     -- Independence Day (July 9) - Argentina
   elseif month == 7 and day == 9 then
@@ -258,3 +264,5 @@ function SetDayColor()
 
   vim.cmd(string.format([[highlight StartifyHeader guifg=%s]], color))
 end
+
+CreateCowsay()
