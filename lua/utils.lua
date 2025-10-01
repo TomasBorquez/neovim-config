@@ -246,7 +246,7 @@ function SetDayColor()
     color = argentina_color
 
     -- Spring in Argentina (September through November)
-  elseif month >= 9 and month <= 11 then
+  elseif month >= 9 and day >= 21 and month <= 11 then
     color = "#98c379" -- Green for spring
 
     -- Student's Day (September 21) - Argentina

@@ -53,15 +53,15 @@ require("lazy").setup({
         auto_install = false,
         ignore_install = {},
         parser_install_dir = nil,
-        ensure_installed = { "glsl" },
+        ensure_installed = { "glsl", "gdscript", "godot_resource", "gdshader" },
         highlight = {
-          enable = true,
-        },
-        indent = {
           enable = true,
         },
         incremental_selection = {
           enable = true,
+        },
+        indent = {
+          enable = false,
         },
       })
     end,
@@ -162,11 +162,11 @@ require("lazy").setup({
         vim.cmd("MasonInstall clang-format")
       end
 
-      -- NOTE: Lua LSP
+      --[[ LuaLS ]]
       local lspconfig = require("lspconfig")
       lspconfig.lua_ls.setup({})
 
-      -- NOTE: Clangd LSP for C
+      --[[ Clangd]]
       local capabilities = require("cmp_nvim_lsp").default_capabilities()
       lspconfig.clangd.setup({
         capabilities = capabilities,
@@ -185,6 +185,20 @@ require("lazy").setup({
         },
       })
 
+      --[[ GDScript]]
+      lspconfig.gdscript.setup({
+        capabilities = capabilities,
+        cmd = vim.lsp.rpc.connect('127.0.0.1', 6005),
+        root_dir = require('lspconfig.util').root_pattern("project.godot", ".git"),
+      })
+
+      --[[ GLSL Analyzer ]]
+      lspconfig.glsl_analyzer.setup({
+        capabilities = require("cmp_nvim_lsp").default_capabilities(),
+        filetypes = { "glsl", "vert", "frag", "geom" },
+      })
+
+      --[[ Conform ]]
       require("conform").setup({
         formatters_by_ft = {
           c = { "clang_format" },
@@ -197,12 +211,6 @@ require("lazy").setup({
         },
       })
 
-      -- NOTE: GLSL Analyzer
-      lspconfig.glsl_analyzer.setup({
-        capabilities = require("cmp_nvim_lsp").default_capabilities(),
-        filetypes = { "glsl", "vert", "frag", "geom" },
-      })
-
       vim.api.nvim_create_autocmd({ "BufRead", "BufNewFile" }, {
         pattern = { "*.glsl", "*.vert", "*.frag", "*.geom" },
         callback = function()
@@ -210,7 +218,7 @@ require("lazy").setup({
         end,
       })
 
-      -- NOTE: Binds
+      --[[ Binds ]]
       vim.keymap.set('n', '<leader>m', vim.diagnostic.goto_next)
       vim.api.nvim_create_autocmd('LspAttach', {
         group = vim.api.nvim_create_augroup('UserLspConfig', {}),
@@ -227,7 +235,7 @@ require("lazy").setup({
         end,
       })
 
-      -- NOTE: LuaSnip
+      --[[ LuaSnip ]]
       local ls = require("luasnip")
 
       ls.config.set_config({
@@ -236,7 +244,7 @@ require("lazy").setup({
         enable_autosnippets = true,
       })
 
-      -- NOTE: CMP
+      --[[ CMP ]]
       local cmp = require("cmp")
       cmp.setup({
         performance = {
@@ -283,6 +291,7 @@ require("lazy").setup({
       })
     end,
   },
+  { "habamax/vim-godot",     event = "VimEnter" },
   {
     "akinsho/toggleterm.nvim",
     version = "*",
