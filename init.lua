@@ -29,7 +29,7 @@ require("lazy").setup({
         highlight FloatShadow gui=NONE
         highlight MatchParen guibg=#504945 gui=NONE guisp=NONE
 
-        highlight Normal guibg=#121212
+        highlight Normal guibg=#191919
         highlight StatusLine guibg=#0D0D0D
 
         highlight TelescopeNormal guibg=#0F0F0F
@@ -47,13 +47,25 @@ require("lazy").setup({
     "nvim-treesitter/nvim-treesitter",
     build = ":TSUpdate",
     config = function()
+      vim.filetype.add({
+        extension = {
+          tmpl = "gotmpl",
+          gohtml = "gotmpl",
+          gotmpl = "gotmpl",
+
+          glsl = "glsl",
+          vert = "glsl",
+          frag = "glsl",
+        },
+      })
+
       require('nvim-treesitter.configs').setup({
         modules = {},
         sync_install = false,
-        auto_install = false,
+        auto_install = true,
         ignore_install = {},
         parser_install_dir = nil,
-        ensure_installed = { "glsl", "gdscript", "godot_resource", "gdshader" },
+        ensure_installed = { "glsl", "gdscript", "godot_resource", "gdshader", "c", "cpp", "javascript", "typescript", "go", "gotmpl", "html" },
         highlight = {
           enable = true,
         },
@@ -83,6 +95,11 @@ require("lazy").setup({
       end)
 
       require('telescope').setup({
+        defaults = {
+          preview = {
+            treesitter = false,
+          }
+        },
         extensions = {
           fzf = {
             fuzzy = true,
@@ -96,12 +113,15 @@ require("lazy").setup({
   },
   {
     "stevearc/oil.nvim",
-    event = "VeryLazy",
+    lazy = false,
     dependencies = { "nvim-tree/nvim-web-devicons" },
     config = function()
       require("oil").setup({
         view_options = {
           show_hidden = true,
+          is_always_hidden = function(name)
+            return vim.endswith(name, ".uid")
+          end,
         },
         use_default_keymaps = false,
         keymaps = {
@@ -120,13 +140,6 @@ require("lazy").setup({
     end,
   },
   {
-    "numToStr/Comment.nvim",
-    event = "VeryLazy",
-    config = function()
-      require("Comment").setup()
-    end,
-  },
-  {
     "neovim/nvim-lspconfig",
     dependencies = {
       "williamboman/mason.nvim",
@@ -140,86 +153,135 @@ require("lazy").setup({
       "L3MON4D3/LuaSnip",
       "saadparwaiz1/cmp_luasnip",
       "stevearc/conform.nvim",
-      {
-        "folke/lazydev.nvim",
-        ft = "lua",
-        opts = {
-          library = {
-            { path = "${3rd}/luv/library", words = { "vim%.uv" } },
-          },
-        },
-      },
+      "windwp/nvim-ts-autotag",
+      { "folke/lazydev.nvim", ft = "lua", opts = {} },
     },
     config = function()
       require("mason").setup()
+
+      local capabilities = require("cmp_nvim_lsp").default_capabilities()
       require("mason-lspconfig").setup({
-        ensure_installed = { "lua_ls", "clangd", "glsl_analyzer" },
+        ensure_installed = { "lua_ls", "clangd", "glsl_analyzer", "tsserver", "svelte", "biome", "gopls" },
         automatic_installation = true,
+        handlers = {
+          function(server_name)
+            vim.lsp.config[server_name] = {
+              capabilities = capabilities,
+            }
+            vim.lsp.enable(server_name)
+          end,
+
+          clangd = function()
+            vim.lsp.config.clangd = {
+              cmd = {
+                "clangd",
+                "--background-index",
+                "--clang-tidy",
+                "--header-insertion=never",
+                "--query-driver=**",
+              },
+              filetypes = { "c", "h" },
+              capabilities = capabilities,
+              init_options = {
+                fallbackFlags = { "-std=c11" },
+                compilationDatabasePath = "./build",
+              },
+            }
+            vim.lsp.enable('clangd')
+          end,
+
+          glsl_analyzer = function()
+            vim.lsp.config.glsl_analyzer = {
+              filetypes = { "glsl", "vert", "frag" },
+              capabilities = capabilities,
+            }
+            vim.lsp.enable('glsl_analyzer')
+          end,
+
+          tsserver = function()
+            vim.lsp.config.tsserver = {
+              cmd = { "typescript-language-server", "--stdio" },
+              filetypes = { "javascript", "javascriptreact", "typescript", "typescriptreact" },
+              capabilities = capabilities,
+            }
+            vim.lsp.enable('tsserver')
+          end,
+
+          biome = function()
+            vim.lsp.config.biome = {
+              filetypes = { "css", "html", "json", "jsonc" },
+              capabilities = capabilities,
+            }
+            vim.lsp.enable('biome')
+          end,
+
+          svelte = function()
+            vim.lsp.config.svelte = {
+              filetypes = { "svelte" },
+              capabilities = capabilities,
+            }
+            vim.lsp.enable('svelte')
+          end,
+
+          gopls = function()
+            vim.lsp.config.gopls = {
+              capabilities = capabilities,
+              filetypes = { "go", "gomod", "gowork", "gotmpl" },
+              settings = {
+                gopls = {
+                  analyses = {
+                    unusedparams = true,
+                  },
+                  staticcheck = true,
+                  gofumpt = true,
+                },
+              },
+            }
+            vim.lsp.enable('gopls')
+          end,
+        }
       })
 
+      -- [[ GDScript ]]
+      vim.lsp.config.gdscript = {
+        cmd = vim.lsp.rpc.connect('127.0.0.1', 6005),
+        capabilities = capabilities,
+      }
+      vim.lsp.enable('gdscript')
+
+      -- [[ Clang Format ]]
       local mason_registry = require("mason-registry")
       if not mason_registry.is_installed("clang-format") then
         vim.cmd("MasonInstall clang-format")
       end
 
-      --[[ LuaLS ]]
-      local lspconfig = require("lspconfig")
-      lspconfig.lua_ls.setup({})
-
-      --[[ Clangd]]
-      local capabilities = require("cmp_nvim_lsp").default_capabilities()
-      lspconfig.clangd.setup({
-        capabilities = capabilities,
-        cmd = {
-          "clangd",
-          "--background-index",
-          "--clang-tidy",
-          "--header-insertion=never",
-          "--compile-commands-dir=.",
-          "--query-driver=**",
-        },
-        filetypes = { "c", "h" },
-        init_options = {
-          fallbackFlags = { "-std=c11" },
-          compilationDatabasePath = "./build",
-        },
-      })
-
-      --[[ GDScript]]
-      lspconfig.gdscript.setup({
-        capabilities = capabilities,
-        cmd = vim.lsp.rpc.connect('127.0.0.1', 6005),
-        root_dir = require('lspconfig.util').root_pattern("project.godot", ".git"),
-      })
-
-      --[[ GLSL Analyzer ]]
-      lspconfig.glsl_analyzer.setup({
-        capabilities = require("cmp_nvim_lsp").default_capabilities(),
-        filetypes = { "glsl", "vert", "frag", "geom" },
-      })
-
       --[[ Conform ]]
       require("conform").setup({
         formatters_by_ft = {
+          -- C/CPP
           c = { "clang_format" },
+          cpp = { "clang_format" },
           h = { "clang_format" },
+          hpp = { "clang_format" },
           glsl = { "clang_format" },
+
+          -- JavaScript
+          javascript = { "biome" },
+          javascriptreact = { "biome" },
+          typescript = { "biome" },
+          typescriptreact = { "biome" },
+          svelte = { "biome" },
         },
         format_on_save = {
-          timeout_ms = 500,
+          timeout_ms = 1000,
           lsp_fallback = true,
         },
       })
 
-      vim.api.nvim_create_autocmd({ "BufRead", "BufNewFile" }, {
-        pattern = { "*.glsl", "*.vert", "*.frag", "*.geom" },
-        callback = function()
-          vim.bo.filetype = "glsl"
-        end,
-      })
-
       --[[ Binds ]]
-      vim.keymap.set('n', '<leader>m', vim.diagnostic.goto_next)
+      vim.keymap.set('n', '<leader>m', function()
+        vim.diagnostic.jump({ count = 1 })
+      end)
       vim.api.nvim_create_autocmd('LspAttach', {
         group = vim.api.nvim_create_augroup('UserLspConfig', {}),
         callback = function(args)
@@ -234,6 +296,9 @@ require("lazy").setup({
           vim.keymap.set('n', '<C-.>', vim.lsp.buf.code_action, opts)
         end,
       })
+
+      --[[ Autoclosing tags ]]
+      require('nvim-ts-autotag').setup()
 
       --[[ LuaSnip ]]
       local ls = require("luasnip")
@@ -291,14 +356,15 @@ require("lazy").setup({
       })
     end,
   },
-  { "habamax/vim-godot",     event = "VimEnter" },
   {
     "akinsho/toggleterm.nvim",
     version = "*",
     opts = {
       direction = "float",
       close_on_exit = true,
-      shell = 'cmd.exe /k "set CHERE_INVOKING=1 && set MSYSTEM=MINGW64 && C:\\msys64\\usr\\bin\\bash.exe --login -i"',
+      -- shell = 'cmd.exe /k "set CHERE_INVOKING=1 && set MSYSTEM=MINGW64 && C:\\msys64\\usr\\bin\\bash.exe --login -i"',
+      -- INFO: ^ cursed config for mingw
+      shell = 'C:\\Users\\eveti\\scoop\\apps\\git\\current\\bin\\bash.exe',
       float_opts = {
         border = "curved",
         winblend = 0,
@@ -327,10 +393,6 @@ require("lazy").setup({
 
       vim.cmd('autocmd! TermOpen term://* lua set_terminal_keymaps()')
     end,
-  },
-  {
-    "windwp/nvim-autopairs",
-    config = function() require("nvim-autopairs").setup() end
   },
   {
     "mhinz/vim-startify",
@@ -377,15 +439,6 @@ require("lazy").setup({
     end,
   },
   {
-    "machakann/vim-highlightedyank",
-    event = "VeryLazy",
-    config = function()
-      vim.g.highlightedyank_highlight_duration = 300
-      vim.cmd([[ highlight HighlightedyankRegion guibg=#335533 guifg=NONE gui=NONE ctermbg=green ctermfg=NONE ]])
-      vim.g.highlightedyank_highlight_group = "HighlightedyankRegion"
-    end,
-  },
-  {
     "kylechui/nvim-surround",
     version = "*",
     event = "VeryLazy",
@@ -404,204 +457,35 @@ require("lazy").setup({
       })
     end
   },
+  { -- TODO: Rewrite myself as a util
+    "machakann/vim-highlightedyank",
+    event = "VeryLazy",
+    config = function()
+      vim.g.highlightedyank_highlight_duration = 300
+      vim.cmd([[ highlight HighlightedyankRegion guibg=#335533 guifg=NONE gui=NONE ctermbg=green ctermfg=NONE ]])
+      vim.g.highlightedyank_highlight_group = "HighlightedyankRegion"
+    end,
+  },
+  {
+    "habamax/vim-godot",
+    event = "VimEnter"
+  },
   {
     "folke/todo-comments.nvim",
     dependencies = { "nvim-lua/plenary.nvim" },
-    opts = {
-      signs = false,
-    }
+    opts = { signs = false }
   },
-  { 'wakatime/vim-wakatime', lazy = false },
   {
-    "mfussenegger/nvim-dap",
-    event = "VeryLazy",
-    dependencies = {
-      "rcarriga/nvim-dap-ui",
-      "nvim-neotest/nvim-nio",
-      "jay-babu/mason-nvim-dap.nvim",
-      "theHamsta/nvim-dap-virtual-text",
-    },
+    "windwp/nvim-autopairs",
     config = function()
-      local mason_dap = require("mason-nvim-dap")
-      local dap = require("dap")
-      local ui = require("dapui")
-      local dap_virtual_text = require("nvim-dap-virtual-text")
-
-      -- Dap Virtual Text
-      dap_virtual_text.setup()
-
-      mason_dap.setup({
-        ensure_installed = { "cppdbg" },
-        automatic_installation = true,
-        handlers = {
-          function(config)
-            require("mason-nvim-dap").default_setup(config)
-          end,
-        },
-      })
-
-      -- Configurations
-      dap.configurations = {
-        c = {
-          {
-            name = "Launch file",
-            type = "cppdbg",
-            request = "launch",
-            program = function()
-              return GetTelescopeDir() .. "/build/main.exe"
-            end,
-            cwd = "${workspaceFolder}",
-            stopAtEntry = false,
-            MIMode = "gdb",
-            miDebuggerPath = "gdb",
-            setupCommands = {
-              {
-                description = "Enable pretty-printing for gdb",
-                text = "-enable-pretty-printing",
-                ignoreFailures = true
-              }
-            }
-          },
-          {
-            name = "Launch file (custom path)",
-            type = "cppdbg",
-            request = "launch",
-            program = function()
-              return vim.fn.input("Path to executable: ", Cwd() .. "/", "file")
-            end,
-            cwd = "${workspaceFolder}",
-            stopAtEntry = false,
-            MIMode = "gdb",
-            miDebuggerPath = "gdb",
-            setupCommands = {
-              {
-                description = "Enable pretty-printing for gdb",
-                text = "-enable-pretty-printing",
-                ignoreFailures = true
-              }
-            }
-          }
-        },
-      }
-
-      -- Disable launch.json
-      local vscode = require('dap.ext.vscode')
-      vscode._load_json = function() return {} end
-
-      -- Dap UI
-      ui.setup({
-        icons = {
-          expanded = "▾",
-          collapsed = "▸",
-          current_frame = "▸"
-        },
-        mappings = {
-          expand = { "<CR>", "<2-LeftMouse>" },
-          open = "o",
-          remove = "d",
-          edit = "e",
-          repl = "r",
-          toggle = "t",
-        },
-        element_mappings = {},
-        expand_lines = true,
-        force_buffers = true,
-        layouts = {
-          {
-            elements = {
-              { id = "scopes",      size = 0.425 },
-              { id = "stacks",      size = 0.425 },
-              { id = "breakpoints", size = 0.15 },
-            },
-            size = 40,
-            position = "left",
-          },
-        },
-        floating = {
-          max_height = nil,
-          max_width = nil,
-          border = "single",
-          mappings = {
-            close = { "q", "<Esc>" },
-          },
-        },
-        controls = {
-          enabled = false, -- This disables the controls panel
-          element = "repl",
-          icons = {
-            pause = "⏸",
-            play = ">",
-            step_into = "⏎",
-            step_over = "⏭",
-            step_out = "⏮",
-            step_back = "b",
-            run_last = "▶▶",
-            terminate = "⏹",
-            disconnect = "⏏",
-          },
-        },
-        render = {
-          max_type_length = nil,
-          max_value_lines = 100,
-          indent = 1,
-        },
-      })
-
-      vim.fn.sign_define('DapBreakpoint', {
-        text = 'B',
-        texthl = 'DapBreakpoint',
-        linehl = '',
-        numhl = ''
-      })
-
-      vim.fn.sign_define('DapStopped', {
-        text = '>',
-        texthl = 'DapStopped',
-        linehl = 'DapStoppedLine',
-        numhl = ''
-      })
-
-      vim.cmd [[
-        highlight DapBreakpoint guifg=#e06c75 ctermfg=203
-        highlight DapBreakpointCondition guifg=#e06c75 ctermfg=203
-        highlight DapStopped guifg=#98c379 ctermfg=114
-        highlight DapStoppedLine guibg=#2d3748 ctermbg=238
-      ]]
-
-      dap.listeners.before.attach.dapui_config = function()
-        ui.open()
-      end
-      dap.listeners.before.launch.dapui_config = function()
-        ui.open()
-      end
-      dap.listeners.before.event_terminated.dapui_config = function()
-        ui.close()
-      end
-      dap.listeners.before.event_exited.dapui_config = function()
-        ui.close()
-      end
-      dap.listeners.after.disconnect.dapui_config = function()
-        ui.close()
-      end
-
-      -- Keymaps
-      vim.keymap.set("n", "<leader>b", dap.toggle_breakpoint)
-
-      vim.keymap.set("n", "<leader>dr", function()
-        dap.toggle_breakpoint()
-        dap.continue()
-      end)
-
-      vim.keymap.set("n", "<leader>dn", dap.continue)
-      vim.keymap.set("n", "<leader>di", dap.step_into)
-      vim.keymap.set("n", "<leader>do", dap.step_over)
-      vim.keymap.set("n", "<leader>du", dap.step_out)
-
-      vim.keymap.set("n", "<leader>dq", function()
-        dap.terminate()
-        ui.close()
-        dap.close()
-      end)
+      require("nvim-autopairs").setup()
+    end
+  },
+  {
+    "numToStr/Comment.nvim",
+    event = "VeryLazy",
+    config = function()
+      require("Comment").setup()
     end,
   },
 })

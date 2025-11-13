@@ -4,12 +4,12 @@ I've already installed, even if they come with flashy new features or whatever, 
 need to update something. In fact updating _usually_ breaks everything at the moment, so no updates coming ever :)
 
 **Versions**:
-- Neovim 0.10
+- Neovim 0.11.4
 - Windows 11
 
 ## Philosophy
 Simplicity above all, meaning:
-- Just a few plugins (37 total)
+- Just a few plugins (31 total)
 - Avoid modularizing and keep everything most in one place.
 - Edit config as little as possible (ideally once per year once stable).
 - Whenever I feel I need a plugin look for native alternatives, develop it myself or avoid temptation from the evil :)

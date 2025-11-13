@@ -34,9 +34,7 @@
 - [x] Make terminal *cwd* equal to what `oil.nvim` has as *cwd*
 - [x] Add debugger support for `ggdb`
 - [ ] Add spelling keybinds
-- [ ] Go back to 1 file expect utils
 - [ ] Watch "You can do *almost* everything without plugins"
-- [ ] Get better with substitute
 
 ## Motions Notes
 - [x] `<C-o>` For previous place where the cursor was at 
@@ -58,7 +56,8 @@
 - [x] `qq` To start recording `q` to stop, and `@@` to execute last macro
 - [x] `<C-d>` to quit gdb
 - [x] `<Leader-sm>` to copy command output
-- [ ] `:s/\(.*\) \1` WTF?
+- [x] `<C-r>+` paste what is on clipboard
+- [x] `<C-r>"` paste what is on yank
 Ergonomy - unbind native:
 - [ ] `<S-v>d` instead of `dd`
 - [ ] `<S-v>y` instead of `yy`

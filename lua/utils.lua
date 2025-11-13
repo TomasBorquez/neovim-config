@@ -175,14 +175,6 @@ function CreateCowsay()
     "        ||----w |",
     "        ||     ||"
   }
-  -- local frog_art = {
-  --   "       _     _",
-  --   "      (')-=-(')",
-  --   "    __(   \"   )__",
-  --   "   / _/'-----'\\_ \\",
-  --   "___\\\\ \\\\     // //___",
-  --   ">____)/_\\---/_\\(____<"
-  -- }
 
   local pad_left_count = GetPadding(cow_art[5], width)
   for _, line in ipairs(cow_art) do
@@ -196,70 +188,137 @@ function CreateCowsay()
   table.insert(cowsay, prog_config)
   table.insert(cowsay, "")
 
-  local formattedDate = CenterText(os.date("%I:%M %p | %d-%m-%Y"), width + #left_pad_spaces)
+  -- Add special date to the formatted date line
+  local special_date = GetSpecialDate()
+  local date_string = os.date("%I:%M %p | %d-%m-%Y")
+  if special_date ~= "" then
+    date_string = date_string .. " | " .. special_date
+  end
+  local formattedDate = CenterText(date_string, width + #left_pad_spaces)
   table.insert(cowsay, 1, formattedDate)
   return cowsay
 end
 
-function SetDayColor()
+function GetSpecialDate()
   local current_date = os.date("*t")
   local month = current_date.month
   local day = current_date.day
 
+  -- New Year (January 1)
+  if month == 1 and day == 1 then
+    return "New Year's Day 🎊"
+    -- Summer in Argentina (December through February)
+  elseif (month == 12) or (month == 1) or (month == 2) then
+    return "Summer in Argentina ☀️"
+    -- Valentine's Day (February 14)
+  elseif month == 2 and day == 14 then
+    return "Valentine's Day 💕"
+    -- Carnival (February/March)
+  elseif (month == 2 and day >= 20) or (month == 3 and day <= 5) then
+    return "Carnival 🎭"
+    -- National Memory Day (March 24)
+  elseif month == 3 and day == 24 then
+    return "National Memory Day 🇦🇷"
+    -- Fall in Argentina (March through May)
+  elseif month >= 3 and month <= 5 then
+    return "Fall in Argentina 🍂"
+    -- Labor Day (May 1)
+  elseif month == 5 and day == 1 then
+    return "Labor Day 🇦🇷"
+    -- May Revolution Day (May 25)
+  elseif month == 5 and day == 25 then
+    return "May Revolution Day 🇦🇷"
+    -- Winter in Argentina (June through August)
+  elseif month >= 6 and month <= 8 then
+    return "Winter in Argentina ❄️"
+    -- Flag Day (June 20)
+  elseif month == 6 and day == 20 then
+    return "Flag Day 🇦🇷"
+    -- Independence Day (July 9)
+  elseif month == 7 and day == 9 then
+    return "Independence Day 🇦🇷"
+    -- San Martín Day (August 17)
+  elseif month == 8 and day == 17 then
+    return "San Martín Day 🇦🇷"
+    -- Student's Day (September 21)
+  elseif month == 9 and day == 21 then
+    return "Student's Day 📚"
+    -- Spring in Argentina (September 21 through November)
+  elseif (month == 9 and day >= 21) or (month == 10 or month == 11) then
+    return "Spring in Argentina 🌸"
+    -- Respect for Cultural Diversity Day (October 12)
+  elseif month == 10 and day == 12 then
+    return "Cultural Diversity Day 🌍"
+    -- National Sovereignty Day (November 20)
+  elseif month == 11 and day == 20 then
+    return "National Sovereignty Day 🇦🇷"
+    -- Christmas Eve and Day (December 24-25)
+  elseif month == 12 and (day == 24 or day == 25) then
+    return "Christmas 🎄"
+  else
+    return ""
+  end
+end
+
+-- INFO: Called on VimEnter
+function SetDayColor()
+  local current_date = os.date("*t")
+  local month = current_date.month
+  local day = current_date.day
   local color = "#9FA8DA" -- Default
   local argentina_color = "#61afef"
 
-  -- New Year (January 1) - Universal
+  -- New Year (January 1)
   if month == 1 and day == 1 then
-    color = "#BF360C" -- Orange
-
+    color = "#BF360C"
     -- Summer in Argentina (December through February)
   elseif (month == 12) or (month == 1) or (month == 2) then
-    color = "#e5c07b" -- Sunny yellow
-
-    -- Valentine's Day (February 14) - Universal
+    color = "#e5c07b"
+    -- Valentine's Day (February 14)
   elseif month == 2 and day == 14 then
-    color = "#e06c75" -- Pink/Red
-
+    color = "#e06c75"
     -- Carnival (February/March)
   elseif (month == 2 and day >= 20) or (month == 3 and day <= 5) then
-    color = "#c678dd" -- Purple
-
-    -- National Memory Day (March 24) - Argentina
+    color = "#c678dd"
+    -- National Memory Day (March 24)
   elseif month == 3 and day == 24 then
     color = argentina_color
-
     -- Fall in Argentina (March through May)
   elseif month >= 3 and month <= 5 then
-    color = "#d19a66" -- Autumn orange/brown
-
-    -- May Revolution Day (May 25) - Argentina
+    color = "#d19a66"
+    -- Labor Day (May 1)
+  elseif month == 5 and day == 1 then
+    color = argentina_color
+    -- May Revolution Day (May 25)
   elseif month == 5 and day == 25 then
     color = argentina_color
-
     -- Winter in Argentina (June through August)
   elseif month >= 6 and month <= 8 then
-    color = "#7a8496" -- Gray blue for winter
-
-    -- Independence Day (July 9) - Argentina
+    color = "#7a8496"
+    -- Flag Day (June 20)
+  elseif month == 6 and day == 20 then
+    color = argentina_color
+    -- Independence Day (July 9)
   elseif month == 7 and day == 9 then
     color = argentina_color
-
-    -- Spring in Argentina (September through November)
-  elseif month >= 9 and day >= 21 and month <= 11 then
-    color = "#98c379" -- Green for spring
-
-    -- Student's Day (September 21) - Argentina
+    -- San Martín Day (August 17)
+  elseif month == 8 and day == 17 then
+    color = argentina_color
+    -- Spring in Argentina (September 21 through November) - CORREGIDO
+  elseif (month == 9 and day >= 21) or (month == 10 or month == 11) then
+    color = "#98c379"
+    -- Student's Day (September 21)
   elseif month == 9 and day == 21 then
-    color = "#00897B" -- Bright green
-
-    -- Respect for Cultural Diversity Day (October 12) - Argentina
+    color = "#00897B"
+    -- Respect for Cultural Diversity Day (October 12)
   elseif month == 10 and day == 12 then
-    color = "#e5c07b" -- Yellow
-
-    -- Christmas Eve and Day (December 24-25) - Universal
+    color = "#e5c07b"
+    -- National Sovereignty Day (November 20)
+  elseif month == 11 and day == 20 then
+    color = argentina_color
+    -- Christmas Eve and Day (December 24-25)
   elseif month == 12 and (day == 24 or day == 25) then
-    color = "#98c379" -- Green
+    color = "#98c379"
   end
 
   vim.cmd(string.format([[highlight StartifyHeader guifg=%s]], color))

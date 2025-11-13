@@ -34,6 +34,15 @@ vim.keymap.set('n', '<leader>bo', '<cmd>silent! %bd|e#|bd#<cr>', { desc = "Close
 
 vim.keymap.set('n', '<F5>', '<CMD>LspRestart<CR>', { desc = 'Restart LSP server' })
 
+-- Window navigation
+vim.keymap.set('n', '<A-h>', '<C-w>h', { desc = 'Move to left window' })
+vim.keymap.set('n', '<A-j>', '<C-w>j', { desc = 'Move to window below' })
+vim.keymap.set('n', '<A-k>', '<C-w>k', { desc = 'Move to window above' })
+vim.keymap.set('n', '<A-l>', '<C-w>l', { desc = 'Move to right window' })
+
+-- Window splits
+vim.keymap.set('n', '<leader>ws', '<cmd>vsplit<CR>', { desc = 'Split window vertically' })
+
 if vim.g.neovide == true then
   pcall(function() vim.keymap.del("n", "<C-^>") end)
   vim.api.nvim_set_keymap("n", "<C-^>",
