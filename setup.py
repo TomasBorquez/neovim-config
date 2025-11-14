@@ -38,6 +38,7 @@ def setup_linux():
     print("\nInstalling Node.js...")
     run_command("curl -fsSL https://deb.nodesource.com/setup_lts.x | sudo -E bash -", shell=True)
     run_command("sudo apt install -y nodejs")
+    run_command("sudo timedatectl set-timezone America/Argentina/Buenos_Aires")
 
 def setup_windows():
     print("Detected Windows")

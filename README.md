@@ -56,6 +56,8 @@ And run the setup file, `python3 setup.py` which will install all the necessary 
 Lastly depending on the platform you will have to set the shell you want to use on the builtin terminal, search for the plugin `akinsho/toggleterm.nvim`
 and change the shell parameter or remove it to use the default one.
 
+**WARNING**: This config also sets your timezone to Argentina/BuenosAires timezone.
+
 And you should be done :D, if you do find any error please report it to me, this is supposed to be a single install and run perfectly
 afterwards, so it would be ideal it breaks the least possible in every platform.
 
