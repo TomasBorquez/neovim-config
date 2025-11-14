@@ -15,7 +15,23 @@ Simplicity above all, meaning:
 - Whenever I feel I need a plugin look for native alternatives, develop it myself or avoid temptation from the evil :)
 
 ## Setup
-Download [nvim 0.11.4](https://github.com/neovim/neovim/releases/tag/v0.11.4), and clone this into `.config/`, like so:
+Download [nvim 0.11.4](https://github.com/neovim/neovim/releases/tag/v0.11.4) like this on linux: 
+```bash
+# if you already installed it through apt:
+# sudo apt remove neovim
+
+curl -LO https://github.com/neovim/neovim/releases/download/v0.11.4/nvim-linux-x86_64.tar.gz
+
+tar xzvf nvim-linux-x86_64.tar.gz
+
+sudo mv nvim-linux-x86_64 /opt/nvim
+
+sudo ln -sf /opt/nvim/bin/nvim /usr/local/bin/nvim
+
+nvim --version # should print 0.11.4
+```
+
+And clone this into `.config/`, like so:
 ```bash
 git clone https://github.com/TomasBorquez/neovim-config ./nvim
 ```
@@ -29,7 +45,7 @@ Invoke-RestMethod -Uri https://get.scoop.sh | Invoke-Expression'
 Install python3:
 ```bash
 # Ubuntu
-sudo apt install python3 python3-pip
+sudo apt install python3 
 
 # Windows
 scoop install python3

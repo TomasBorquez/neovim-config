@@ -25,7 +25,7 @@ def setup_linux():
     
     packages = {
         "Essential build tools": ["build-essential", "cmake", "curl", "wget", "git"],
-        "Mason dependencies": ["unzip", "clang-format"],
+        "Mason dependencies": ["unzip", "python3-pip", "python3-venv"],
         "Go": ["golang-go"],
         "C/C++ tools": ["clang", "gdb", "valgrind"]
     }
@@ -64,9 +64,9 @@ def setup_windows():
             run_command(f"scoop install {pkg}")
 
 def print_versions():
-    print("\n" + "="*50)
+    print("\n" + EQUAL_SPACE)
     print("Setup complete!")
-    print("="*50)
+    print(EQUAL_SPACE)
     print("\nInstalled versions:")
     
     version_commands = {
