@@ -5,7 +5,7 @@ need to update something. In fact updating _usually_ breaks everything at the mo
 
 **Versions**:
 - Neovim 0.11.4
-- OS: Windows 11 / Linux
+- OS: Windows / Linux
 
 ## Philosophy
 Simplicity above all, meaning:
@@ -15,13 +15,30 @@ Simplicity above all, meaning:
 - Whenever I feel I need a plugin look for native alternatives, develop it myself or avoid temptation from the evil :)
 
 ## Setup
-Download [nvim 0.11.4](https://github.com/neovim/neovim/releases/tag/v0.11.4) ofc, and clone this into `.config/`, like so:
+Download [nvim 0.11.4](https://github.com/neovim/neovim/releases/tag/v0.11.4), and clone this into `.config/`, like so:
 ```bash
 git clone https://github.com/TomasBorquez/neovim-config ./nvim
 ```
 
-Run this command `python3 setup.py` (install any python version beforehand) which will install all the necessary dependencies and languages I regularly use. 
-**WARNING**: If you are in windows you'll need [Scoop](https://scoop.sh/) installed.
+**If** on Windows, install [Scoop](https://scoop.sh/) like so:
+```ps1
+Set-ExecutionPolicy -ExecutionPolicy RemoteSigned -Scope CurrentUser'
+Invoke-RestMethod -Uri https://get.scoop.sh | Invoke-Expression'
+```
+
+Install python3:
+```bash
+# Ubuntu
+sudo apt install python3 python3-pip
+
+# Windows
+scoop install python3
+```
+
+And run the setup file, `python3 setup.py` which will install all the necessary dependencies and languages I regularly use. 
+
+Lastly depending on the platform you will have to set the shell you want to use on the builtin terminal, search for the plugin `akinsho/toggleterm.nvim`
+and change the shell parameter or remove it to use the default one.
 
 And you should be done :D, if you do find any error please report it to me, this is supposed to be a single install and run perfectly
 afterwards, so it would be ideal it breaks the least possible in every platform.

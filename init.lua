@@ -362,9 +362,11 @@ require("lazy").setup({
     opts = {
       direction = "float",
       close_on_exit = true,
+      -- INFO: Config for MinGW64:
       -- shell = 'cmd.exe /k "set CHERE_INVOKING=1 && set MSYSTEM=MINGW64 && C:\\msys64\\usr\\bin\\bash.exe --login -i"',
-      -- INFO: ^ cursed config for mingw
+      -- INFO: Config for Gitbash:
       shell = 'C:\\Users\\eveti\\scoop\\apps\\git\\current\\bin\\bash.exe',
+      -- WARNING: If on linux, remove or add custom one
       float_opts = {
         border = "curved",
         winblend = 0,

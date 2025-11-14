@@ -33,6 +33,7 @@
 - [x] Lower amount of recommendations `nvim-cmp`
 - [x] Make terminal *cwd* equal to what `oil.nvim` has as *cwd*
 - [x] Add debugger support for `ggdb`
+- [x] Create a setup script
 - [ ] Add spelling keybinds
 - [ ] Watch "You can do *almost* everything without plugins"
 

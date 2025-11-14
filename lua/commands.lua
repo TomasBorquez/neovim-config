@@ -22,10 +22,18 @@ vim.api.nvim_create_autocmd('BufWinEnter', {
 })
 
 -- User Commands
-vim.api.nvim_create_user_command('AppData', ':Oil ~/AppData/', {})
-vim.api.nvim_create_user_command('Config', ':Oil ~/AppData/Local/nvim/', {})
-vim.api.nvim_create_user_command('Shada', ':Oil ~/AppData/Local/nvim-data/shada/', {})
-vim.api.nvim_create_user_command('Programming', ':Oil ~/Programming/learn/', {})
+local is_windows = vim.fn.has('win32') == 1 or vim.fn.has('win64') == 1
+if is_windows then
+  vim.api.nvim_create_user_command('AppData', ':Oil ~/AppData/', {})
+  vim.api.nvim_create_user_command('Config', ':Oil ~/AppData/Local/nvim/', {})
+  vim.api.nvim_create_user_command('Shada', ':Oil ~/AppData/Local/nvim-data/shada/', {})
+  vim.api.nvim_create_user_command('Programming', ':Oil ~/Programming/learn/', {})
+else
+  vim.api.nvim_create_user_command('Config', ':Oil ~/.config/nvim/', {})
+  vim.api.nvim_create_user_command('Shada', ':Oil ~/.local/state/nvim/shada/', {})
+  vim.api.nvim_create_user_command('Programming', ':Oil ~/programming/learn/', {})
+end
+
 vim.api.nvim_create_user_command('Home', 'Startify', {})
 
 -- Screenshot/Presentation Mode Toggle

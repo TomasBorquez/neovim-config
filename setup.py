@@ -25,7 +25,7 @@ def setup_linux():
     
     packages = {
         "Essential build tools": ["build-essential", "cmake", "curl", "wget", "git"],
-        "Mason dependencies": ["unzip"],
+        "Mason dependencies": ["unzip", "clang-format"],
         "Go": ["golang-go"],
         "C/C++ tools": ["clang", "gdb", "valgrind"]
     }
