@@ -26,7 +26,7 @@ vim.keymap.set("n", "<leader>t", "<CMD>Oil<CR>", { desc = "Open file explorer" }
 vim.keymap.set("n", "<leader>h", "<CMD>Home<CR>", { desc = "Go home" })
 vim.keymap.set("n", "<leader>ss", "<CMD>luafile %<CR>", { desc = "Execute current lua" })
 
-vim.keymap.set('n', '<Leader>sm', function()
+vim.keymap.set('n', '<Leader>cm', function()
   vim.fn.setreg('+', vim.fn.execute('messages'))
 end, { desc = 'Copy messages to system clipboard' })
 
