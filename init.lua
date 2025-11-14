@@ -140,7 +140,8 @@ require("lazy").setup({
     end,
   },
   {
-    "neovim/nvim-lspconfig",
+    'neovim/nvim-lspconfig',
+    version = 'v2.5.0',
     dependencies = {
       "williamboman/mason.nvim",
       "williamboman/mason-lspconfig.nvim",
@@ -158,8 +159,6 @@ require("lazy").setup({
     },
     config = function()
       require("mason").setup()
-
-      local lspconfig = require("lspconfig")
       local capabilities = require("cmp_nvim_lsp").default_capabilities()
 
       require("mason-lspconfig").setup({
@@ -167,94 +166,85 @@ require("lazy").setup({
         automatic_installation = {
           exclude = { "ruby_lsp" }
         },
-        handlers = {
-          function(server_name)
-            lspconfig[server_name].setup({
-              capabilities = capabilities,
-            })
-          end,
-
-          clangd = function()
-            lspconfig.clangd.setup({
-              cmd = {
-                "clangd",
-                "--background-index",
-                "--clang-tidy",
-                "--header-insertion=never",
-                "--query-driver=**",
-              },
-              filetypes = { "c", "h" },
-              capabilities = capabilities,
-              init_options = {
-                fallbackFlags = { "-std=c11" },
-                compilationDatabasePath = "./build",
-              },
-            })
-          end,
-
-          glsl_analyzer = function()
-            lspconfig.glsl_analyzer.setup({
-              filetypes = { "glsl", "vert", "frag" },
-              capabilities = capabilities,
-            })
-          end,
-
-          tsserver = function()
-            lspconfig.tsserver.setup({
-              cmd = { "typescript-language-server", "--stdio" },
-              filetypes = { "javascript", "javascriptreact", "typescript", "typescriptreact" },
-              capabilities = capabilities,
-            })
-          end,
-
-          biome = function()
-            lspconfig.biome.setup({
-              filetypes = { "css", "html", "json", "jsonc" },
-              capabilities = capabilities,
-            })
-          end,
-
-          svelte = function()
-            lspconfig.svelte.setup({
-              filetypes = { "svelte" },
-              capabilities = capabilities,
-            })
-          end,
-
-          gopls = function()
-            lspconfig.gopls.setup({
-              capabilities = capabilities,
-              filetypes = { "go", "gomod", "gowork", "gotmpl" },
-              settings = {
-                gopls = {
-                  analyses = {
-                    unusedparams = true,
-                  },
-                  staticcheck = true,
-                  gofumpt = true,
-                },
-              },
-            })
-          end,
-        }
       })
 
-      -- [[ GDScript ]]
-      lspconfig.gdscript.setup({
-        cmd = vim.lsp.rpc.connect('127.0.0.1', 6005),
+      vim.lsp.config('lua_ls', {
         capabilities = capabilities,
       })
 
-      -- [[ Ruby ]]
-      lspconfig.ruby_lsp.setup({
+      vim.lsp.config('clangd', {
         cmd = {
-          vim.fn.expand("~/.local/share/mise/shims/bundle"),
-          "exec",
-          "ruby-lsp"
+          "clangd",
+          "--background-index",
+          "--clang-tidy",
+          "--header-insertion=never",
+          "--query-driver=**",
         },
-        root_dir = lspconfig.util.root_pattern("Gemfile", ".git"),
+        filetypes = { "c", "h" },
+        capabilities = capabilities,
+        init_options = {
+          fallbackFlags = { "-std=c11" },
+          compilationDatabasePath = "./build",
+        },
+      })
+
+      vim.lsp.config('glsl_analyzer', {
+        filetypes = { "glsl", "vert", "frag" },
         capabilities = capabilities,
       })
+
+      vim.lsp.config('ts_ls', {
+        cmd = { "typescript-language-server", "--stdio" },
+        filetypes = { "javascript", "javascriptreact", "typescript", "typescriptreact" },
+        capabilities = capabilities,
+      })
+
+      vim.lsp.config('biome', {
+        filetypes = { "css", "html", "json", "jsonc" },
+        capabilities = capabilities,
+      })
+
+      vim.lsp.config('svelte', {
+        filetypes = { "svelte" },
+        capabilities = capabilities,
+      })
+
+      vim.lsp.config('gopls', {
+        capabilities = capabilities,
+        filetypes = { "go", "gomod", "gowork", "gotmpl" },
+        settings = {
+          gopls = {
+            analyses = {
+              unusedparams = true,
+            },
+            staticcheck = true,
+            gofumpt = true,
+          },
+        },
+      })
+
+      if IsWindows() then
+        vim.lsp.config('gdscript', {
+          cmd = vim.lsp.rpc.connect('127.0.0.1', 6005),
+          capabilities = capabilities,
+        })
+        vim.lsp.enable('gdscript')
+      end
+
+      if IsLinux() then
+        vim.lsp.config('ruby_lsp', {
+          cmd = {
+            vim.fn.expand("~/.local/share/mise/shims/bundle"),
+            "exec",
+            "ruby-lsp"
+          },
+          root_dir = vim.fs.root(0, { "Gemfile", ".git" }),
+          capabilities = capabilities,
+        })
+        vim.lsp.enable('ruby_lsp')
+      end
+
+      vim.lsp.enable({ 'lua_ls', 'clangd', 'glsl_analyzer', 'ts_ls', 'biome', 'svelte', 'gopls' })
 
       -- [[ Clang Format ]]
       local mason_registry = require("mason-registry")

@@ -324,4 +324,12 @@ function SetDayColor()
   vim.cmd(string.format([[highlight StartifyHeader guifg=%s]], color))
 end
 
+function IsWindows()
+  return vim.fn.has('win32') == 1 or vim.fn.has('win64') == 1
+end
+
+function IsLinux()
+  return vim.fn.has('win32') ~= 1 and vim.fn.has('win64') ~= 1
+end
+
 CreateCowsay()
