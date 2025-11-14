@@ -73,7 +73,7 @@ def print_versions():
         "Go": "go version",
         "Node": "node --version",
         "npm": "npm --version",
-        "Python": "python3 --version"
+        "Python": "python3 --version",
         "Clang": "clang --version"
     }
     
