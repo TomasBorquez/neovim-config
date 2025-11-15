@@ -5,17 +5,18 @@ import shutil
 
 EQUAL_SPACE = "=" * 50
 
-def run_command(cmd, shell=False):
+def run_command(cmd: str, shell = False):
     try:
         if isinstance(cmd, str) and not shell:
             cmd = cmd.split()
+
         result = subprocess.run(cmd, check=True, shell=shell, capture_output=True, text=True)
         return result.returncode == 0
     except subprocess.CalledProcessError as e:
         print(f"Error: {e}")
         return False
 
-def check_command_exists(cmd):
+def check_command_exists(cmd: str):
     return shutil.which(cmd) is not None
 
 def setup_linux():
@@ -25,7 +26,7 @@ def setup_linux():
     
     packages = {
         "Essential build tools": ["build-essential", "cmake", "curl", "wget", "git"],
-        "Mason dependencies": ["unzip", "python3-pip", "python3-venv"],
+        "Mason dependencies": ["unzip", "python3-pip", "python3-venv", "ripgrep"],
         "Go": ["golang-go"],
         "C/C++ tools": ["clang", "gdb", "valgrind"]
     }
@@ -53,7 +54,7 @@ def setup_windows():
     
     packages = {
         "Essential build tools": ["mingw", "cmake", "curl", "wget", "git"],
-        "Mason dependencies": ["unzip"],
+        "Mason dependencies": ["unzip", "ripgrep"],
         "Go": ["go"],
         "Node.js": ["nodejs"],
         "C/C++ tools": ["llvm", "gdb"]

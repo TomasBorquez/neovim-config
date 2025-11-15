@@ -50,8 +50,6 @@ require("lazy").setup({
       vim.filetype.add({
         extension = {
           tmpl = "gotmpl",
-          gohtml = "gotmpl",
-          gotmpl = "gotmpl",
 
           glsl = "glsl",
           vert = "glsl",
@@ -59,7 +57,7 @@ require("lazy").setup({
         },
       })
 
-      require('nvim-treesitter.configs').setup({
+      require("nvim-treesitter.configs").setup({
         modules = {},
         sync_install = false,
         auto_install = true,
@@ -87,14 +85,14 @@ require("lazy").setup({
     config = function()
       local telescope_builtin = require("telescope.builtin")
 
-      vim.keymap.set('n', '<Leader>f', function()
+      vim.keymap.set("n", "<Leader>f", function()
         telescope_builtin.find_files({ cwd = GetTelescopeDir() })
       end)
-      vim.keymap.set('n', '<Leader>g', function()
+      vim.keymap.set("n", "<Leader>g", function()
         telescope_builtin.live_grep({ cwd = GetTelescopeDir() })
       end)
 
-      require('telescope').setup({
+      require("telescope").setup({
         defaults = {
           preview = {
             treesitter = false,
@@ -140,8 +138,8 @@ require("lazy").setup({
     end,
   },
   {
-    'neovim/nvim-lspconfig',
-    version = 'v2.5.0',
+    "neovim/nvim-lspconfig",
+    version = "v2.5.0",
     dependencies = {
       "williamboman/mason.nvim",
       "williamboman/mason-lspconfig.nvim",
@@ -168,11 +166,11 @@ require("lazy").setup({
         },
       })
 
-      vim.lsp.config('lua_ls', {
+      vim.lsp.config("lua_ls", {
         capabilities = capabilities,
       })
 
-      vim.lsp.config('clangd', {
+      vim.lsp.config("clangd", {
         cmd = {
           "clangd",
           "--background-index",
@@ -188,28 +186,28 @@ require("lazy").setup({
         },
       })
 
-      vim.lsp.config('glsl_analyzer', {
+      vim.lsp.config("glsl_analyzer", {
         filetypes = { "glsl", "vert", "frag" },
         capabilities = capabilities,
       })
 
-      vim.lsp.config('ts_ls', {
+      vim.lsp.config("ts_ls", {
         cmd = { "typescript-language-server", "--stdio" },
         filetypes = { "javascript", "javascriptreact", "typescript", "typescriptreact" },
         capabilities = capabilities,
       })
 
-      vim.lsp.config('biome', {
+      vim.lsp.config("biome", {
         filetypes = { "css", "html", "json", "jsonc" },
         capabilities = capabilities,
       })
 
-      vim.lsp.config('svelte', {
+      vim.lsp.config("svelte", {
         filetypes = { "svelte" },
         capabilities = capabilities,
       })
 
-      vim.lsp.config('gopls', {
+      vim.lsp.config("gopls", {
         capabilities = capabilities,
         filetypes = { "go", "gomod", "gowork", "gotmpl" },
         settings = {
@@ -224,27 +222,26 @@ require("lazy").setup({
       })
 
       if IsWindows() then
-        vim.lsp.config('gdscript', {
-          cmd = vim.lsp.rpc.connect('127.0.0.1', 6005),
+        vim.lsp.config("gdscript", {
+          cmd = vim.lsp.rpc.connect("127.0.0.1", 6005),
+          filetypes = { "godot" },
           capabilities = capabilities,
         })
-        vim.lsp.enable('gdscript')
+        vim.lsp.enable("gdscript")
       end
 
       if IsLinux() then
-        vim.lsp.config('ruby_lsp', {
+        vim.lsp.config("ruby_lsp", {
           cmd = {
-            vim.fn.expand("~/.local/share/mise/shims/bundle"),
-            "exec",
-            "ruby-lsp"
+            vim.fn.expand("~/.local/share/mise/shims/ruby-lsp")
           },
           root_dir = vim.fs.root(0, { "Gemfile", ".git" }),
           capabilities = capabilities,
         })
-        vim.lsp.enable('ruby_lsp')
+        vim.lsp.enable("ruby_lsp")
       end
 
-      vim.lsp.enable({ 'lua_ls', 'clangd', 'glsl_analyzer', 'ts_ls', 'biome', 'svelte', 'gopls' })
+      vim.lsp.enable({ "lua_ls", "clangd", "glsl_analyzer", "ts_ls", "biome", "svelte", "gopls" })
 
       -- [[ Clang Format ]]
       local mason_registry = require("mason-registry")
@@ -276,26 +273,26 @@ require("lazy").setup({
       })
 
       --[[ Binds ]]
-      vim.keymap.set('n', '<leader>m', function()
+      vim.keymap.set("n", "<leader>m", function()
         vim.diagnostic.jump({ count = 1 })
       end)
-      vim.api.nvim_create_autocmd('LspAttach', {
-        group = vim.api.nvim_create_augroup('UserLspConfig', {}),
+      vim.api.nvim_create_autocmd("LspAttach", {
+        group = vim.api.nvim_create_augroup("UserLspConfig", {}),
         callback = function(args)
           local client = vim.lsp.get_client_by_id(args.data.client_id)
           if not client then return end
 
           local opts = { buffer = args.buf }
-          vim.keymap.set('n', 'gD', vim.lsp.buf.declaration, opts)
-          vim.keymap.set('n', 'gd', vim.lsp.buf.definition, opts)
-          vim.keymap.set('n', 'gh', vim.lsp.buf.hover, opts)
-          vim.keymap.set('n', '<leader>r', vim.lsp.buf.rename, opts)
-          vim.keymap.set('n', '<C-.>', vim.lsp.buf.code_action, opts)
+          vim.keymap.set("n", "gD", vim.lsp.buf.declaration, opts)
+          vim.keymap.set("n", "gd", vim.lsp.buf.definition, opts)
+          vim.keymap.set("n", "gh", vim.lsp.buf.hover, opts)
+          vim.keymap.set("n", "<leader>r", vim.lsp.buf.rename, opts)
+          vim.keymap.set("n", "<C-.>", vim.lsp.buf.code_action, opts)
         end,
       })
 
       --[[ Autoclosing tags ]]
-      require('nvim-ts-autotag').setup()
+      require("nvim-ts-autotag").setup()
 
       --[[ LuaSnip ]]
       local ls = require("luasnip")
@@ -323,32 +320,32 @@ require("lazy").setup({
           end,
         },
         mapping = cmp.mapping.preset.insert({
-          ['<C-Space>'] = cmp.mapping.complete(),
-          ['<C-e>'] = cmp.mapping.abort(),
-          ['<CR>'] = cmp.mapping.confirm({ select = true }),
-          ['<C-n>'] = cmp.mapping.select_next_item(),
-          ['<C-p>'] = cmp.mapping.select_prev_item(),
-          ['<Tab>'] = cmp.mapping(function(fallback)
+          ["<C-Space>"] = cmp.mapping.complete(),
+          ["<C-e>"] = cmp.mapping.abort(),
+          ["<CR>"] = cmp.mapping.confirm({ select = true }),
+          ["<C-n>"] = cmp.mapping.select_next_item(),
+          ["<C-p>"] = cmp.mapping.select_prev_item(),
+          ["<Tab>"] = cmp.mapping(function(fallback)
             if ls.expand_or_jumpable() then
               ls.expand_or_jump()
             else
               fallback()
             end
-          end, { 'i', 's' }),
-          ['<S-Tab>'] = cmp.mapping(function(fallback)
+          end, { "i", "s" }),
+          ["<S-Tab>"] = cmp.mapping(function(fallback)
             if ls.jumpable(-1) then
               ls.jump(-1)
             else
               fallback()
             end
-          end, { 'i', 's' }),
+          end, { "i", "s" }),
         }),
         sources = cmp.config.sources({
-          { name = 'luasnip' },
-          { name = 'nvim_lua' },
-          { name = 'nvim_lsp' },
-          { name = 'buffer' },
-          { name = 'path' },
+          { name = "luasnip" },
+          { name = "nvim_lua" },
+          { name = "nvim_lsp" },
+          { name = "buffer" },
+          { name = "path" },
         }),
       })
     end,
@@ -360,10 +357,10 @@ require("lazy").setup({
       -- WARNING: If on linux, keep blank or add custom one
 
       -- INFO: Config for MinGW64:
-      -- shell = 'cmd.exe /k "set CHERE_INVOKING=1 && set MSYSTEM=MINGW64 && C:\\msys64\\usr\\bin\\bash.exe --login -i"',
+      -- shell = "cmd.exe /k "set CHERE_INVOKING=1 && set MSYSTEM=MINGW64 && C:\\msys64\\usr\\bin\\bash.exe --login -i"",
 
       -- INFO: Config for Gitbash:
-      -- shell = 'C:\\Users\\eveti\\scoop\\apps\\git\\current\\bin\\bash.exe',
+      -- shell = "C:\\Users\\eveti\\scoop\\apps\\git\\current\\bin\\bash.exe",
       direction = "float",
       close_on_exit = true,
       float_opts = {
@@ -381,18 +378,18 @@ require("lazy").setup({
       toggleterm.setup(opts)
 
       vim.keymap.set("n", "<C-`>", function()
-        vim.cmd(string.format('ToggleTerm dir=%s', Cwd()))
+        vim.cmd(string.format("ToggleTerm dir=%s", Cwd()))
       end, { desc = "Open terminal in current directory" })
 
       function _G.set_terminal_keymaps()
         local keymap_opts = { noremap = true }
-        vim.api.nvim_buf_set_keymap(0, 't', '<C-d>', [[<cmd>q!<CR>]], keymap_opts)
-        vim.api.nvim_buf_set_keymap(0, 't', '<C-`>', [[<cmd>q<CR>]], keymap_opts)
-        vim.api.nvim_buf_set_keymap(0, 't', '<Esc>', [[<C-\><C-n>]], keymap_opts)
-        vim.api.nvim_buf_set_keymap(0, 't', '<C-v>', [[<C-\><C-n>"+pa]], keymap_opts)
+        vim.api.nvim_buf_set_keymap(0, "t", "<C-d>", [[<cmd>q!<CR>]], keymap_opts)
+        vim.api.nvim_buf_set_keymap(0, "t", "<C-`>", [[<cmd>q<CR>]], keymap_opts)
+        vim.api.nvim_buf_set_keymap(0, "t", "<Esc>", [[<C-\><C-n>]], keymap_opts)
+        vim.api.nvim_buf_set_keymap(0, "t", "<C-v>", [[<C-\><C-n>"+pa]], keymap_opts)
       end
 
-      vim.cmd('autocmd! TermOpen term://* lua set_terminal_keymaps()')
+      vim.cmd("autocmd! TermOpen term://* lua set_terminal_keymaps()")
     end,
   },
   {
@@ -403,8 +400,8 @@ require("lazy").setup({
       vim.g.startify_custom_header = CreateCowsay()
 
       vim.g.startify_lists = {
-        { type = 'sessions', header = { '  Sessions' } },
-        { type = 'files',    header = { '  Recent Files' } },
+        { type = "sessions", header = { "  Sessions" } },
+        { type = "files",    header = { "  Recent Files" } },
       }
 
       vim.g.startify_session_autoload = 1
@@ -416,8 +413,8 @@ require("lazy").setup({
       vim.api.nvim_create_autocmd({ "FileType" }, {
         pattern = "startify",
         callback = function()
-          vim.api.nvim_buf_set_keymap(0, 'n', 'p', '<cmd>Programming<CR>', { noremap = true, silent = true })
-          vim.api.nvim_buf_set_keymap(0, 'n', 'c', '<cmd>SLoad config<CR>', { noremap = true, silent = true })
+          vim.api.nvim_buf_set_keymap(0, "n", "p", "<cmd>Programming<CR>", { noremap = true, silent = true })
+          vim.api.nvim_buf_set_keymap(0, "n", "c", "<cmd>Config<CR>", { noremap = true, silent = true })
         end
       })
     end,
@@ -490,4 +487,4 @@ require("lazy").setup({
     end,
   },
 })
-require('commands')
+require("commands")
