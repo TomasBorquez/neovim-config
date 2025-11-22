@@ -207,57 +207,89 @@ function GetSpecialDate()
   -- New Year (January 1)
   if month == 1 and day == 1 then
     return "New Year's Day 🎊"
-    -- Summer in Argentina (December through February)
-  elseif (month == 12) or (month == 1) or (month == 2) then
-    return "Summer in Argentina ☀️"
-    -- Valentine's Day (February 14)
-  elseif month == 2 and day == 14 then
-    return "Valentine's Day 💕"
-    -- Carnival (February/March)
-  elseif (month == 2 and day >= 20) or (month == 3 and day <= 5) then
-    return "Carnival 🎭"
-    -- National Memory Day (March 24)
-  elseif month == 3 and day == 24 then
-    return "National Memory Day 🇦🇷"
-    -- Fall in Argentina (March through May)
-  elseif month >= 3 and month <= 5 then
-    return "Fall in Argentina 🍂"
-    -- Labor Day (May 1)
-  elseif month == 5 and day == 1 then
-    return "Labor Day 🇦🇷"
-    -- May Revolution Day (May 25)
-  elseif month == 5 and day == 25 then
-    return "May Revolution Day 🇦🇷"
-    -- Winter in Argentina (June through August)
-  elseif month >= 6 and month <= 8 then
-    return "Winter in Argentina ❄️"
-    -- Flag Day (June 20)
-  elseif month == 6 and day == 20 then
-    return "Flag Day 🇦🇷"
-    -- Independence Day (July 9)
-  elseif month == 7 and day == 9 then
-    return "Independence Day 🇦🇷"
-    -- San Martín Day (August 17)
-  elseif month == 8 and day == 17 then
-    return "San Martín Day 🇦🇷"
-    -- Student's Day (September 21)
-  elseif month == 9 and day == 21 then
-    return "Student's Day 📚"
-    -- Spring in Argentina (September 21 through November)
-  elseif (month == 9 and day >= 21) or (month == 10 or month == 11) then
-    return "Spring in Argentina 🌸"
-    -- Respect for Cultural Diversity Day (October 12)
-  elseif month == 10 and day == 12 then
-    return "Cultural Diversity Day 🌍"
-    -- National Sovereignty Day (November 20)
-  elseif month == 11 and day == 20 then
-    return "National Sovereignty Day 🇦🇷"
-    -- Christmas Eve and Day (December 24-25)
-  elseif month == 12 and (day == 24 or day == 25) then
-    return "Christmas 🎄"
-  else
-    return ""
   end
+
+  -- Summer in Argentina (December through February)
+  if (month == 12) or (month == 1) or (month == 2) then
+    return "Summer in Argentina ☀️"
+  end
+
+  -- Valentine's Day (February 14)
+  if month == 2 and day == 14 then
+    return "Valentine's Day 💕"
+  end
+
+  -- Carnival (February/March)
+  if (month == 2 and day >= 20) or (month == 3 and day <= 5) then
+    return "Carnival 🎭"
+  end
+
+  -- National Memory Day (March 24)
+  if month == 3 and day == 24 then
+    return "National Memory Day 🇦🇷"
+  end
+
+  -- Fall in Argentina (March through May)
+  if month >= 3 and month <= 5 then
+    return "Fall in Argentina 🍂"
+  end
+
+  -- Labor Day (May 1)
+  if month == 5 and day == 1 then
+    return "Labor Day 🇦🇷"
+  end
+
+  -- May Revolution Day (May 25)
+  if month == 5 and day == 25 then
+    return "May Revolution Day 🇦🇷"
+  end
+
+  -- Winter in Argentina (June through August)
+  if month >= 6 and month <= 8 then
+    return "Winter in Argentina ❄️"
+  end
+
+  -- Flag Day (June 20)
+  if month == 6 and day == 20 then
+    return "Flag Day 🇦🇷"
+  end
+
+  -- Independence Day (July 9)
+  if month == 7 and day == 9 then
+    return "Independence Day 🇦🇷"
+  end
+
+  -- San Martín Day (August 17)
+  if month == 8 and day == 17 then
+    return "San Martín Day 🇦🇷"
+  end
+
+  -- Student's Day (September 21)
+  if month == 9 and day == 21 then
+    return "Student's Day 📚"
+  end
+
+  -- Spring in Argentina (September 21 through November)
+  if (month == 9 and day >= 21) or (month == 10 or month == 11) then
+    return "Spring in Argentina 🌸"
+  end
+
+  -- Respect for Cultural Diversity Day (October 12)
+  if month == 10 and day == 12 then
+    return "Cultural Diversity Day 🌍"
+  end
+
+  -- National Sovereignty Day (November 20)
+  if month == 11 and day == 20 then
+    return "National Sovereignty Day 🇦🇷"
+  end
+
+  -- Christmas Eve and Day (December 24-25)
+  if month == 12 and (day == 24 or day == 25) then
+    return "Christmas 🎄"
+  end
+
+  return ""
 end
 
 -- INFO: Called on VimEnter

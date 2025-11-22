@@ -1,3 +1,7 @@
+if vim.fn.getcwd() == "C:\\Program Files\\Neovide" then
+  vim.cmd("cd " .. vim.fn.expand("~"))
+end
+
 local lazypath = vim.fn.stdpath("data") .. "/lazy/lazy.nvim"
 
 ---@diagnostic disable-next-line: undefined-field
@@ -161,9 +165,6 @@ require("lazy").setup({
 
       require("mason-lspconfig").setup({
         ensure_installed = { "lua_ls", "clangd", "glsl_analyzer", "tsserver", "svelte", "biome", "gopls" },
-        automatic_installation = {
-          exclude = { "ruby_lsp" }
-        },
       })
 
       vim.lsp.config("lua_ls", {
@@ -228,17 +229,6 @@ require("lazy").setup({
           capabilities = capabilities,
         })
         vim.lsp.enable("gdscript")
-      end
-
-      if IsLinux() then
-        vim.lsp.config("ruby_lsp", {
-          cmd = {
-            vim.fn.expand("~/.local/share/mise/shims/ruby-lsp")
-          },
-          root_dir = vim.fs.root(0, { "Gemfile", ".git" }),
-          capabilities = capabilities,
-        })
-        vim.lsp.enable("ruby_lsp")
       end
 
       vim.lsp.enable({ "lua_ls", "clangd", "glsl_analyzer", "ts_ls", "biome", "svelte", "gopls" })
@@ -356,11 +346,11 @@ require("lazy").setup({
     opts = {
       -- WARNING: If on linux, keep blank or add custom one
 
-      -- INFO: Config for MinGW64:
+      -- INFO: _Cursed_ config for MinGW64:
       -- shell = "cmd.exe /k "set CHERE_INVOKING=1 && set MSYSTEM=MINGW64 && C:\\msys64\\usr\\bin\\bash.exe --login -i"",
 
       -- INFO: Config for Gitbash:
-      -- shell = "C:\\Users\\eveti\\scoop\\apps\\git\\current\\bin\\bash.exe",
+      shell = "C:\\Users\\eveti\\scoop\\apps\\git\\current\\bin\\bash.exe",
       direction = "float",
       close_on_exit = true,
       float_opts = {
