@@ -1,6 +1,7 @@
-vim.o.guifont = "Comic Mono:h13:#e-subpixelantialias"
+vim.o.guifont = "Comic Mono:h14:#e-subpixelantialias"
+vim.o.sessionoptions = "blank,buffers,curdir,folds,help,tabpages,winsize,winpos,terminal,localoptions"
 vim.g.mapleader = " "
-vim.g.c_syntax_for_h = 1 -- Detect .h files
+vim.g.c_syntax_for_h = 1 -- detect .h files
 vim.opt.number = true
 vim.opt.relativenumber = true
 vim.opt.ignorecase = true
@@ -12,12 +13,15 @@ vim.opt.softtabstop = 2
 vim.opt.shiftwidth = 2
 vim.opt.expandtab = true
 vim.opt.signcolumn = "yes"
-vim.opt.swapfile = false
 vim.opt.wrap = false
 vim.opt.updatetime = 300
 vim.opt.fileformat = "unix"
 vim.opt.fileformats = "unix,dos"
 vim.bo.fileformat = "unix"
+
+if vim.fn.has('win32') == 1 or vim.fn.has('win64') == 1 then
+  vim.opt.swapfile = false
+end
 
 vim.diagnostic.config({
   update_in_insert = true,

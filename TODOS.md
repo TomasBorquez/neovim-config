@@ -34,8 +34,9 @@
 - [x] Make terminal *cwd* equal to what `oil.nvim` has as *cwd*
 - [x] Add debugger support for `ggdb`
 - [x] Create a setup script
+- [x] Add multiple terminals
 - [ ] Add spelling keybinds
-- [ ] Watch "You can do *almost* everything without plugins"
+- [ ] Add cowsay again, custom session ui perhaps
 
 ## Motions Notes
 - [x] `<C-o>` For previous place where the cursor was at 
@@ -59,8 +60,3 @@
 - [x] `<Leader-sm>` to copy command output
 - [x] `<C-r>+` paste what is on clipboard
 - [x] `<C-r>"` paste what is on yank
-Ergonomy - unbind native:
-- [ ] `<S-v>d` instead of `dd`
-- [ ] `<S-v>y` instead of `yy`
-- [ ] `go`     instead of `gg`
-

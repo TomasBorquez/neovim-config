@@ -1,19 +1,12 @@
 -- Auto Commands
-vim.api.nvim_create_autocmd("VimEnter", {
-  pattern = "*",
-  callback = function()
-    SetDayColor()
-  end
-})
 
-vim.api.nvim_create_autocmd("User", {
-  pattern = "LazyDone",
-  callback = function()
-    local stats = require("lazy").stats()
-    local ms = (math.floor(stats.startuptime * 100 + 0.5) / 100)
-    print("Neovim loaded " .. stats.count .. " plugins in " .. ms .. "ms")
-  end,
-})
+-- TODO: Add back when CowSay
+-- vim.api.nvim_create_autocmd("VimEnter", {
+--   pattern = "*",
+--   callback = function()
+--     SetDayColor()
+--   end
+-- })
 
 vim.api.nvim_create_autocmd('BufWinEnter', {
   callback = function()
@@ -25,16 +18,17 @@ vim.api.nvim_create_autocmd('BufWinEnter', {
 local is_windows = vim.fn.has('win32') == 1 or vim.fn.has('win64') == 1
 if is_windows then
   vim.api.nvim_create_user_command('AppData', ':Oil ~/AppData/', {})
-  vim.api.nvim_create_user_command('Config', ':Oil ~/AppData/Local/nvim/', {})
   vim.api.nvim_create_user_command('Shada', ':Oil ~/AppData/Local/nvim-data/shada/', {})
+  vim.api.nvim_create_user_command('Config', ':Oil ~/AppData/Local/nvim/', {})
   vim.api.nvim_create_user_command('Programming', ':Oil ~/Programming/learn/', {})
 else
-  vim.api.nvim_create_user_command('Config', ':Oil ~/.config/nvim/', {})
   vim.api.nvim_create_user_command('Shada', ':Oil ~/.local/state/nvim/shada/', {})
+  vim.api.nvim_create_user_command('Config', ':Oil ~/.config/nvim/', {})
   vim.api.nvim_create_user_command('Programming', ':Oil ~/programming/learn/', {})
+  vim.api.nvim_create_user_command('Ideas', ':Oil ~/programming/ideas/', {})
+  vim.api.nvim_create_user_command('Linux', ':Oil ~/programming/learn/linux/', {})
+  vim.api.nvim_create_user_command('VM', ':Oil ~/programming/learn/qemu-kernel-vm/', {})
 end
-
-vim.api.nvim_create_user_command('Home', 'Startify', {})
 
 -- Screenshot/Presentation Mode Toggle
 local screenshot_mode = false

@@ -1,4 +1,8 @@
-if vim.fn.getcwd() == "C:\\Program Files\\Neovide" then
+local current_dir = vim.fn.getcwd()
+local wsl_root = "/mnt/c/WINDOWS/system32"
+local win_root = "C:\\Program Files\\Neovide"
+
+if current_dir == wsl_root or current_dir == win_root then
   vim.cmd("cd " .. vim.fn.expand("~"))
 end
 
@@ -100,7 +104,18 @@ require("lazy").setup({
         defaults = {
           preview = {
             treesitter = false,
-          }
+          },
+          file_ignore_patterns = { "^.git/", "node_modules" },
+          vimgrep_arguments = {
+            "rg",
+            "--color=never",
+            "--no-heading",
+            "--with-filename",
+            "--line-number",
+            "--column",
+            "--smart-case",
+            "--hidden",
+          },
         },
         extensions = {
           fzf = {
@@ -111,6 +126,8 @@ require("lazy").setup({
           }
         }
       })
+
+      require('telescope').load_extension('fzf')
     end
   },
   {
@@ -167,6 +184,11 @@ require("lazy").setup({
         ensure_installed = { "lua_ls", "clangd", "glsl_analyzer", "tsserver", "svelte", "biome", "gopls" },
       })
 
+      local mason_registry = require("mason-registry")
+      if not mason_registry.is_installed("clang-format") then
+        vim.cmd("MasonInstall clang-format")
+      end
+
       vim.lsp.config("lua_ls", {
         capabilities = capabilities,
       })
@@ -182,7 +204,6 @@ require("lazy").setup({
         filetypes = { "c", "h" },
         capabilities = capabilities,
         init_options = {
-          fallbackFlags = { "-std=c11" },
           compilationDatabasePath = "./build",
         },
       })
@@ -222,25 +243,11 @@ require("lazy").setup({
         },
       })
 
-      if IsWindows() then
-        vim.lsp.config("gdscript", {
-          cmd = vim.lsp.rpc.connect("127.0.0.1", 6005),
-          filetypes = { "godot" },
-          capabilities = capabilities,
-        })
-        vim.lsp.enable("gdscript")
-      end
-
       vim.lsp.enable({ "lua_ls", "clangd", "glsl_analyzer", "ts_ls", "biome", "svelte", "gopls" })
 
-      -- [[ Clang Format ]]
-      local mason_registry = require("mason-registry")
-      if not mason_registry.is_installed("clang-format") then
-        vim.cmd("MasonInstall clang-format")
-      end
-
       --[[ Conform ]]
-      require("conform").setup({
+      local conform = require("conform")
+      conform.setup({
         formatters_by_ft = {
           -- C/CPP
           c = { "clang_format" },
@@ -256,24 +263,25 @@ require("lazy").setup({
           typescriptreact = { "biome" },
           svelte = { "biome" },
         },
-        format_on_save = {
-          timeout_ms = 1000,
-          lsp_fallback = true,
-        },
       })
 
-      --[[ Binds ]]
+      vim.keymap.set("n", "<C-f>", function()
+        conform.format({ lsp_fallback = true })
+      end, { desc = "Format buffer" })
+
       vim.keymap.set("n", "<leader>m", function()
         vim.diagnostic.jump({ count = 1 })
       end)
+
       vim.api.nvim_create_autocmd("LspAttach", {
         group = vim.api.nvim_create_augroup("UserLspConfig", {}),
         callback = function(args)
           local client = vim.lsp.get_client_by_id(args.data.client_id)
-          if not client then return end
+          if !client then
+            return
+          end
 
           local opts = { buffer = args.buf }
-          vim.keymap.set("n", "gD", vim.lsp.buf.declaration, opts)
           vim.keymap.set("n", "gd", vim.lsp.buf.definition, opts)
           vim.keymap.set("n", "gh", vim.lsp.buf.hover, opts)
           vim.keymap.set("n", "<leader>r", vim.lsp.buf.rename, opts)
@@ -315,20 +323,6 @@ require("lazy").setup({
           ["<CR>"] = cmp.mapping.confirm({ select = true }),
           ["<C-n>"] = cmp.mapping.select_next_item(),
           ["<C-p>"] = cmp.mapping.select_prev_item(),
-          ["<Tab>"] = cmp.mapping(function(fallback)
-            if ls.expand_or_jumpable() then
-              ls.expand_or_jump()
-            else
-              fallback()
-            end
-          end, { "i", "s" }),
-          ["<S-Tab>"] = cmp.mapping(function(fallback)
-            if ls.jumpable(-1) then
-              ls.jump(-1)
-            else
-              fallback()
-            end
-          end, { "i", "s" }),
         }),
         sources = cmp.config.sources({
           { name = "luasnip" },
@@ -350,7 +344,7 @@ require("lazy").setup({
       -- shell = "cmd.exe /k "set CHERE_INVOKING=1 && set MSYSTEM=MINGW64 && C:\\msys64\\usr\\bin\\bash.exe --login -i"",
 
       -- INFO: Config for Gitbash:
-      shell = "C:\\Users\\eveti\\scoop\\apps\\git\\current\\bin\\bash.exe",
+      -- shell = "C:\\Users\\eveti\\scoop\\apps\\git\\current\\bin\\bash.exe",
       direction = "float",
       close_on_exit = true,
       float_opts = {
@@ -367,47 +361,53 @@ require("lazy").setup({
       local toggleterm = require("toggleterm")
       toggleterm.setup(opts)
 
-      vim.keymap.set("n", "<C-`>", function()
-        vim.cmd(string.format("ToggleTerm dir=%s", Cwd()))
-      end, { desc = "Open terminal in current directory" })
+      local current_term = nil
+      local function switch_terminal(target_term)
+        return function()
+          if current_term == target_term then
+            vim.cmd("q")
+            current_term = nil
+            return
+          end
+
+          if target_term == 0 then
+            vim.cmd("q!")
+            current_term = nil
+            return
+          end
+
+          if current_term ~= nil then
+            vim.cmd("q")
+          end
+
+          local term_cmd = target_term .. "ToggleTerm"
+          vim.cmd(string.format("%s dir=%s", term_cmd, Cwd()))
+          current_term = target_term
+        end
+      end
+
+      vim.keymap.set("n", "<C-1>", switch_terminal(1))
+      vim.keymap.set("n", "<C-2>", switch_terminal(2))
+      vim.keymap.set("n", "<C-3>", switch_terminal(3))
 
       function _G.set_terminal_keymaps()
-        local keymap_opts = { noremap = true }
-        vim.api.nvim_buf_set_keymap(0, "t", "<C-d>", [[<cmd>q!<CR>]], keymap_opts)
-        vim.api.nvim_buf_set_keymap(0, "t", "<C-`>", [[<cmd>q<CR>]], keymap_opts)
-        vim.api.nvim_buf_set_keymap(0, "t", "<Esc>", [[<C-\><C-n>]], keymap_opts)
-        vim.api.nvim_buf_set_keymap(0, "t", "<C-v>", [[<C-\><C-n>"+pa]], keymap_opts)
+        vim.keymap.set("t", "<C-d>", switch_terminal(0))
+        vim.keymap.set("t", "<C-1>", switch_terminal(1))
+        vim.keymap.set("t", "<C-2>", switch_terminal(2))
+        vim.keymap.set("t", "<C-3>", switch_terminal(3))
+        vim.keymap.set("t", "<Esc>", [[<C-\><C-n>]])
+        vim.keymap.set("t", "<C-v>", [[<C-\><C-n>"+pa]])
       end
 
       vim.cmd("autocmd! TermOpen term://* lua set_terminal_keymaps()")
     end,
   },
   {
-    "mhinz/vim-startify",
+    "rmagatti/auto-session",
     lazy = false,
-    priority = 1000,
     config = function()
-      vim.g.startify_custom_header = CreateCowsay()
-
-      vim.g.startify_lists = {
-        { type = "sessions", header = { "  Sessions" } },
-        { type = "files",    header = { "  Recent Files" } },
-      }
-
-      vim.g.startify_session_autoload = 1
-      vim.g.startify_session_delete_buffers = 1
-      vim.g.startify_change_to_vcs_root = 1
-      vim.g.startify_fortune_use_unicode = 1
-      vim.g.startify_session_persistence = 1
-
-      vim.api.nvim_create_autocmd({ "FileType" }, {
-        pattern = "startify",
-        callback = function()
-          vim.api.nvim_buf_set_keymap(0, "n", "p", "<cmd>Programming<CR>", { noremap = true, silent = true })
-          vim.api.nvim_buf_set_keymap(0, "n", "c", "<cmd>Config<CR>", { noremap = true, silent = true })
-        end
-      })
-    end,
+      require("auto-session").setup({})
+    end
   },
   {
     "ThePrimeagen/harpoon",
@@ -415,7 +415,13 @@ require("lazy").setup({
     dependencies = { "nvim-lua/plenary.nvim" },
     config = function()
       local harpoon = require("harpoon")
-      harpoon:setup()
+      harpoon:setup({
+        settings = {
+          save_on_toggle = true,
+          sync_on_ui_close = true,
+          tabline = true,
+        },
+      })
 
       vim.keymap.set("n", "<leader>a", function() harpoon:list():add() end)
       vim.keymap.set("n", "<C-e>", function() harpoon.ui:toggle_quick_menu(harpoon:list()) end)
@@ -434,11 +440,8 @@ require("lazy").setup({
       require("nvim-surround").setup({
         keymaps = {
           normal = "s",
-          normal_cur = "ss",
-          normal_line = "S",
-          normal_cur_line = "SS",
           visual = "s",
-          visual_line = "S",
+          normal_cur = "ss",
           delete = "ds",
           change = "cs",
         },
@@ -453,10 +456,6 @@ require("lazy").setup({
       vim.cmd([[ highlight HighlightedyankRegion guibg=#335533 guifg=NONE gui=NONE ctermbg=green ctermfg=NONE ]])
       vim.g.highlightedyank_highlight_group = "HighlightedyankRegion"
     end,
-  },
-  {
-    "habamax/vim-godot",
-    event = "VimEnter"
   },
   {
     "folke/todo-comments.nvim",
@@ -475,6 +474,6 @@ require("lazy").setup({
     config = function()
       require("Comment").setup()
     end,
-  },
+  }
 })
 require("commands")
