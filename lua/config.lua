@@ -23,6 +23,19 @@ if vim.fn.has('win32') == 1 or vim.fn.has('win64') == 1 then
   vim.opt.swapfile = false
 end
 
+vim.g.clipboard = {
+  name = 'win32yank',
+  copy = {
+    ['+'] = 'win32yank.exe -i --crlf',
+    ['*'] = 'win32yank.exe -i --crlf',
+  },
+  paste = {
+    ['+'] = 'win32yank.exe -o --lf',
+    ['*'] = 'win32yank.exe -o --lf',
+  },
+  cache_enabled = 0,
+}
+
 vim.diagnostic.config({
   update_in_insert = true,
   virtual_text = true,

@@ -184,6 +184,7 @@ require("lazy").setup({
         ensure_installed = { "lua_ls", "clangd", "glsl_analyzer", "tsserver", "svelte", "biome", "gopls" },
       })
 
+      local util = require("lspconfig.util")
       local mason_registry = require("mason-registry")
       if not mason_registry.is_installed("clang-format") then
         vim.cmd("MasonInstall clang-format")
@@ -203,9 +204,7 @@ require("lazy").setup({
         },
         filetypes = { "c", "h" },
         capabilities = capabilities,
-        init_options = {
-          compilationDatabasePath = "./build",
-        },
+        init_options = { compilationDatabasePath = "./build" },
       })
 
       vim.lsp.config("glsl_analyzer", {
@@ -277,7 +276,7 @@ require("lazy").setup({
         group = vim.api.nvim_create_augroup("UserLspConfig", {}),
         callback = function(args)
           local client = vim.lsp.get_client_by_id(args.data.client_id)
-          if !client then
+          if not client then
             return
           end
 
@@ -391,12 +390,13 @@ require("lazy").setup({
       vim.keymap.set("n", "<C-3>", switch_terminal(3))
 
       function _G.set_terminal_keymaps()
-        vim.keymap.set("t", "<C-d>", switch_terminal(0))
+        vim.keymap.set("t", "<C-d>", "<Nop>")
+        vim.keymap.set("t", "<C-S-v>", [[<C-\><C-n>"+pa]])
+        vim.keymap.set("t", "<C-S-d>", switch_terminal(0))
         vim.keymap.set("t", "<C-1>", switch_terminal(1))
         vim.keymap.set("t", "<C-2>", switch_terminal(2))
         vim.keymap.set("t", "<C-3>", switch_terminal(3))
         vim.keymap.set("t", "<Esc>", [[<C-\><C-n>]])
-        vim.keymap.set("t", "<C-v>", [[<C-\><C-n>"+pa]])
       end
 
       vim.cmd("autocmd! TermOpen term://* lua set_terminal_keymaps()")
