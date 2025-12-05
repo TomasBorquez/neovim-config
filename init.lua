@@ -424,6 +424,10 @@ require("lazy").setup({
       })
 
       vim.keymap.set("n", "<leader>a", function() harpoon:list():add() end)
+
+      -- TODO: Using terminal commands meanwhile this is open, makes terminal open as a buffer instead of a floating one 
+      -- and leave an error saying "nvim/lazy/toggleterm.nvim/lua/toggleterm/ui.lua:375: Window was closed immediately"
+      -- opening terminal again crashes the editor
       vim.keymap.set("n", "<C-e>", function() harpoon.ui:toggle_quick_menu(harpoon:list()) end)
 
       vim.keymap.set("n", "<C-h>", function() harpoon:list():select(1) end)
