@@ -88,7 +88,7 @@ require("lazy").setup({
     "nvim-telescope/telescope.nvim",
     dependencies = {
       { "nvim-lua/plenary.nvim" },
-      { "nvim-telescope/telescope-fzf-native.nvim", build = "cmake -S. -Bbuild -DCMAKE_BUILD_TYPE=Release && cmake --build build --config Release" }
+      { "nvim-telescope/telescope-fzf-native.nvim", build = "make" }
     },
     config = function()
       local telescope_builtin = require("telescope.builtin")
@@ -184,7 +184,6 @@ require("lazy").setup({
         ensure_installed = { "lua_ls", "clangd", "glsl_analyzer", "tsserver", "svelte", "biome", "gopls" },
       })
 
-      local util = require("lspconfig.util")
       local mason_registry = require("mason-registry")
       if not mason_registry.is_installed("clang-format") then
         vim.cmd("MasonInstall clang-format")
