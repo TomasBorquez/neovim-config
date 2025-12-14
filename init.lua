@@ -161,6 +161,7 @@ require("lazy").setup({
   {
     "neovim/nvim-lspconfig",
     version = "v2.5.0",
+    event = { "BufReadPre", "BufNewFile" },
     dependencies = {
       "williamboman/mason.nvim",
       "williamboman/mason-lspconfig.nvim",
@@ -173,8 +174,6 @@ require("lazy").setup({
       "L3MON4D3/LuaSnip",
       "saadparwaiz1/cmp_luasnip",
       "stevearc/conform.nvim",
-      "windwp/nvim-ts-autotag",
-      { "folke/lazydev.nvim", ft = "lua", opts = {} },
     },
     config = function()
       require("mason").setup()
@@ -264,7 +263,18 @@ require("lazy").setup({
       })
 
       vim.keymap.set("n", "<C-f>", function()
-        conform.format({ lsp_fallback = true })
+        local line = vim.fn.line(".")
+        conform.format({
+          lsp_fallback = true,
+          async = true,
+          range = { start = { line, 0 }, ["end"] = { line, 0 } },
+        })
+      end, { desc = "Format line you are on" })
+
+      local key = vim.api.nvim_replace_termcodes("<Esc>", true, false, true)
+      vim.keymap.set("v", "<C-f>", function()
+        conform.format({ lsp_fallback = true, async = true })
+        vim.api.nvim_feedkeys(key, "n", false)
       end, { desc = "Format buffer" })
 
       vim.keymap.set("n", "<leader>m", function()
@@ -286,9 +296,6 @@ require("lazy").setup({
           vim.keymap.set("n", "<C-.>", vim.lsp.buf.code_action, opts)
         end,
       })
-
-      --[[ Autoclosing tags ]]
-      require("nvim-ts-autotag").setup()
 
       --[[ LuaSnip ]]
       local ls = require("luasnip")
@@ -333,6 +340,12 @@ require("lazy").setup({
     end,
   },
   {
+    "windwp/nvim-ts-autotag",
+    event = "InsertEnter",
+    ft = { "html", "javascript", "javascriptreact", "typescript", "typescriptreact", "svelte", "vue", "xml" },
+  },
+  { "folke/lazydev.nvim", ft = "lua", opts = {} },
+  {
     "akinsho/toggleterm.nvim",
     version = "*",
     opts = {
@@ -357,11 +370,20 @@ require("lazy").setup({
     event = "VeryLazy",
     config = function(_, opts)
       local toggleterm = require("toggleterm")
+      local harpoon = require("harpoon")
       toggleterm.setup(opts)
+
+      local function close_harpoon_menu()
+        if harpoon.ui.win_id and vim.api.nvim_win_is_valid(harpoon.ui.win_id) then
+          harpoon.ui:close_menu()
+        end
+      end
 
       local current_term = nil
       local function switch_terminal(target_term)
         return function()
+          close_harpoon_menu()
+
           if current_term == target_term then
             vim.cmd("q")
             current_term = nil
@@ -414,19 +436,9 @@ require("lazy").setup({
     dependencies = { "nvim-lua/plenary.nvim" },
     config = function()
       local harpoon = require("harpoon")
-      harpoon:setup({
-        settings = {
-          save_on_toggle = true,
-          sync_on_ui_close = true,
-          tabline = true,
-        },
-      })
+      harpoon:setup()
 
       vim.keymap.set("n", "<leader>a", function() harpoon:list():add() end)
-
-      -- TODO: Using terminal commands meanwhile this is open, makes terminal open as a buffer instead of a floating one 
-      -- and leave an error saying "nvim/lazy/toggleterm.nvim/lua/toggleterm/ui.lua:375: Window was closed immediately"
-      -- opening terminal again crashes the editor
       vim.keymap.set("n", "<C-e>", function() harpoon.ui:toggle_quick_menu(harpoon:list()) end)
 
       vim.keymap.set("n", "<C-h>", function() harpoon:list():select(1) end)

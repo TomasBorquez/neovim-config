@@ -6,8 +6,8 @@ vim.keymap.set('n', "<leader>ss", "<CMD>luafile %<CR>", { desc = "Execute curren
 vim.keymap.set('n', '<leader>bo', '<cmd>silent! %bd|e#|bd#<cr>', { desc = "Close all buffers except current" })
 
 vim.keymap.set('n', '>', '>>')
-vim.keymap.set('x', '>', '>gv')
 vim.keymap.set('n', '<', '<<')
+vim.keymap.set('x', '>', '>gv')
 vim.keymap.set('x', '<', '<gv')
 
 vim.keymap.set('v', '<C-c>', function()
@@ -78,3 +78,5 @@ map_nop('<C-7>', 'n')
 map_nop('<C-8>', 'n')
 map_nop('<C-9>', 'n')
 map_nop('<C-0>', 'n')
+
+map_nop('<C-f>', 'n')

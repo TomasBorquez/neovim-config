@@ -17,6 +17,8 @@ vim.opt.wrap = false
 vim.opt.updatetime = 300
 vim.opt.fileformat = "unix"
 vim.opt.fileformats = "unix,dos"
+vim.opt.list = true
+vim.opt.listchars:append({ tab = "  ", trail = "·" })
 vim.bo.fileformat = "unix"
 
 if vim.fn.has('win32') == 1 or vim.fn.has('win64') == 1 then
@@ -45,3 +47,15 @@ vim.diagnostic.config({
 })
 
 vim.loader.enable()
+
+-- Unused default plugins
+vim.g.loaded_netrw = 1
+vim.g.loaded_netrwPlugin = 1
+vim.g.loaded_gzip = 1
+vim.g.loaded_tar = 1
+vim.g.loaded_tarPlugin = 1
+vim.g.loaded_zip = 1
+vim.g.loaded_zipPlugin = 1
+vim.g.loaded_tutor = 1
+vim.g.loaded_tohtml = 1
+vim.g.loaded_rplugin = 1
