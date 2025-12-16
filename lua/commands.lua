@@ -1,13 +1,4 @@
 -- Auto Commands
-
--- TODO: Add back when CowSay
--- vim.api.nvim_create_autocmd("VimEnter", {
---   pattern = "*",
---   callback = function()
---     SetDayColor()
---   end
--- })
-
 vim.api.nvim_create_autocmd('BufWinEnter', {
   callback = function()
     vim.opt.formatoptions:remove({ 'c', 'o' })
