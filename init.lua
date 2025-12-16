@@ -6,6 +6,14 @@ if current_dir == wsl_root or current_dir == win_root then
   vim.cmd("cd " .. vim.fn.expand("~"))
 end
 
+if vim.fn.has('nvim') == 1 then
+  vim.fn.serverstart('/tmp/nvimsocket')
+end
+
+if vim.fn.has('nvim') == 1 and vim.fn.executable('nvr') == 1 then
+  vim.env.GIT_EDITOR = "nvr --remote-tab-wait +'set bufhidden=wipe'"
+end
+
 local lazypath = vim.fn.stdpath("data") .. "/lazy/lazy.nvim"
 
 ---@diagnostic disable-next-line: undefined-field
@@ -426,7 +434,9 @@ require("lazy").setup({
     "rmagatti/auto-session",
     lazy = false,
     config = function()
-      require("auto-session").setup({})
+      require("auto-session").setup({
+        auto_restore_last_session = true,
+      })
     end
   },
   {
@@ -449,20 +459,16 @@ require("lazy").setup({
   {
     "kdheepak/lazygit.nvim",
     cmd = {
-      "LazyGit",
       "LazyGitConfig",
       "LazyGitCurrentFile",
-      "LazyGitFilter",
-      "LazyGitFilterCurrentFile",
     },
     dependencies = { "nvim-lua/plenary.nvim" },
     keys = {
-      { "<leader>lg", function()
-        local root = GetRootDir()
-        vim.cmd("cd " .. root)
-        vim.cmd("LazyGit")
-      end }
-    }
+      { "<leader>lg", "<cmd>LazyGitCurrentFile<cr>" }
+    },
+    config = function()
+      vim.g.lazygit_floating_window_scaling_factor = 0.8
+    end
   },
   {
     "kylechui/nvim-surround",
