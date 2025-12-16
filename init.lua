@@ -349,11 +349,6 @@ require("lazy").setup({
     "akinsho/toggleterm.nvim",
     version = "*",
     opts = {
-      -- WARNING: If on linux, keep blank or add custom one
-
-      -- INFO: _Cursed_ config for MinGW64:
-      -- shell = "cmd.exe /k "set CHERE_INVOKING=1 && set MSYSTEM=MINGW64 && C:\\msys64\\usr\\bin\\bash.exe --login -i"",
-
       -- INFO: Config for Gitbash:
       -- shell = "C:\\Users\\eveti\\scoop\\apps\\git\\current\\bin\\bash.exe",
       direction = "float",
@@ -371,7 +366,6 @@ require("lazy").setup({
     config = function(_, opts)
       local toggleterm = require("toggleterm")
       local harpoon = require("harpoon")
-      toggleterm.setup(opts)
 
       local function close_harpoon_menu()
         if harpoon.ui.win_id and vim.api.nvim_win_is_valid(harpoon.ui.win_id) then
@@ -410,17 +404,22 @@ require("lazy").setup({
       vim.keymap.set("n", "<C-2>", switch_terminal(2))
       vim.keymap.set("n", "<C-3>", switch_terminal(3))
 
-      function _G.set_terminal_keymaps()
+      local keymap_opts = { noremap = true, silent = true }
+      function _G.set_terminal_keymaps(term)
+        if term.cmd ~= 'lazygit' then
+          vim.api.nvim_buf_set_keymap(term.bufnr, 't', '<esc>', [[<C-\><C-n>]], keymap_opts)
+        end
+
         vim.keymap.set("t", "<C-d>", "<Nop>")
         vim.keymap.set("t", "<C-S-v>", [[<C-\><C-n>"+pa]])
         vim.keymap.set("t", "<C-S-d>", switch_terminal(0))
         vim.keymap.set("t", "<C-1>", switch_terminal(1))
         vim.keymap.set("t", "<C-2>", switch_terminal(2))
         vim.keymap.set("t", "<C-3>", switch_terminal(3))
-        vim.keymap.set("t", "<Esc>", [[<C-\><C-n>]])
       end
 
-      vim.cmd("autocmd! TermOpen term://* lua set_terminal_keymaps()")
+      opts.on_open = set_terminal_keymaps
+      toggleterm.setup(opts)
     end,
   },
   {
@@ -448,6 +447,24 @@ require("lazy").setup({
     end,
   },
   {
+    "kdheepak/lazygit.nvim",
+    cmd = {
+      "LazyGit",
+      "LazyGitConfig",
+      "LazyGitCurrentFile",
+      "LazyGitFilter",
+      "LazyGitFilterCurrentFile",
+    },
+    dependencies = { "nvim-lua/plenary.nvim" },
+    keys = {
+      { "<leader>lg", function()
+        local root = GetRootDir()
+        vim.cmd("cd " .. root)
+        vim.cmd("LazyGit")
+      end }
+    }
+  },
+  {
     "kylechui/nvim-surround",
     version = "*",
     event = "VeryLazy",
@@ -462,22 +479,6 @@ require("lazy").setup({
         },
       })
     end
-  },
-  {
-    "NeogitOrg/neogit",
-    lazy = false,
-    cmd = "Neogit",
-    dependencies = {
-      "nvim-lua/plenary.nvim",
-      "sindrets/diffview.nvim",
-    },
-    config = function()
-      local neogit = require('neogit')
-
-      vim.keymap.set("n", "<Leader>cg", function()
-        neogit.open({ cwd = GetRootDir(), kind = "floating" })
-      end)
-    end,
   },
   { -- TODO: Rewrite myself as a util
     "machakann/vim-highlightedyank",

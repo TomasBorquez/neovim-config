@@ -23,19 +23,19 @@ def setup_linux():
     print("Detected Linux/WSL")
     print("\nUpdating package lists...")
     run_command("sudo apt update")
-    
+
     packages = {
-        "Essential build tools": ["build-essential", "cmake", "curl", "wget", "git"],
+        "Essential build tools": ["build-essential", "cmake", "curl", "wget", "git", "lazygit"],
         "Mason dependencies": ["unzip", "python3-pip", "python3-venv", "ripgrep"],
         "Go": ["golang-go"],
         "C/C++ tools": ["clang", "gdb", "valgrind"]
     }
-    
+
     for category, pkgs in packages.items():
         print(f"\nInstalling {category}...")
         cmd = ["sudo", "apt", "install", "-y"] + pkgs
         run_command(cmd)
-    
+
     print("\nInstalling Node.js...")
     run_command("curl -fsSL https://deb.nodesource.com/setup_lts.x | sudo -E bash -", shell=True)
     run_command("sudo apt install -y nodejs")
@@ -44,22 +44,22 @@ def setup_linux():
 
 def setup_windows():
     print("Detected Windows")
-    
+
     if not check_command_exists("scoop"):
         print("\nScoop is not installed!")
         print("Please install Scoop first by running this in PowerShell:")
         print('  Set-ExecutionPolicy -ExecutionPolicy RemoteSigned -Scope CurrentUser')
         print('  Invoke-RestMethod -Uri https://get.scoop.sh | Invoke-Expression')
         sys.exit(1)
-    
+
     packages = {
-        "Essential build tools": ["mingw", "cmake", "curl", "wget", "git"],
+        "Essential build tools": ["mingw", "cmake", "curl", "wget", "git", "lazygit"],
         "Mason dependencies": ["unzip", "ripgrep"],
         "Go": ["go"],
         "Node.js": ["nodejs"],
         "C/C++ tools": ["llvm", "gdb"]
     }
-    
+
     for category, pkgs in packages.items():
         print(f"\nInstalling {category}...")
         for pkg in pkgs:
@@ -71,7 +71,7 @@ def print_versions():
     print("Setup complete!")
     print(EQUAL_SPACE)
     print("\nInstalled versions:")
-    
+
     version_commands = {
         "Go": "go version",
         "Node": "node --version",
@@ -79,7 +79,7 @@ def print_versions():
         "Python": "python3 --version",
         "Clang": "clang --version"
     }
-    
+
     for name, cmd in version_commands.items():
         try:
             result = subprocess.run(cmd.split(), capture_output=True, text=True, check=True)
@@ -92,9 +92,9 @@ def main():
     print(EQUAL_SPACE)
     print("Development Environment Setup")
     print(EQUAL_SPACE)
-    
+
     system = platform.system()
-    
+
     if system == "Linux":
         setup_linux()
     elif system == "Windows":
@@ -102,9 +102,9 @@ def main():
     else:
         print(f"Unsupported platform: {system}")
         sys.exit(1)
-    
+
     print_versions()
-    
+
     print("\nNext steps:")
     print("  1. Restart your terminal")
     print("  2. Open Neovim - Mason will auto-install LSP servers")

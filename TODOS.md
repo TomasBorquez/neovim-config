@@ -35,6 +35,7 @@
 - [x] Add debugger support for `ggdb`
 - [x] Create a setup script
 - [x] Add multiple terminals
+- [x] Lazygit
 - [ ] Add spelling keybinds
 - [ ] Add cowsay again, custom session ui perhaps
 
