@@ -463,6 +463,22 @@ require("lazy").setup({
       })
     end
   },
+  {
+    "NeogitOrg/neogit",
+    lazy = false,
+    cmd = "Neogit",
+    dependencies = {
+      "nvim-lua/plenary.nvim",
+      "sindrets/diffview.nvim",
+    },
+    config = function()
+      local neogit = require('neogit')
+
+      vim.keymap.set("n", "<Leader>cg", function()
+        neogit.open({ cwd = GetBufferDir(), kind = "floating" })
+      end)
+    end,
+  },
   { -- TODO: Rewrite myself as a util
     "machakann/vim-highlightedyank",
     event = "VeryLazy",
