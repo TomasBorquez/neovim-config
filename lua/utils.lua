@@ -49,7 +49,7 @@ function GetBufferDir()
   return current_buffer_dir
 end
 
-function GetTelescopeDir()
+function GetRootDir()
   local path = Cwd()
   if path == nil then
     path = vim.fn.expand('%:p:h')

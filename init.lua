@@ -94,10 +94,10 @@ require("lazy").setup({
       local telescope_builtin = require("telescope.builtin")
 
       vim.keymap.set("n", "<Leader>f", function()
-        telescope_builtin.find_files({ cwd = GetTelescopeDir() })
+        telescope_builtin.find_files({ cwd = GetRootDir() })
       end)
       vim.keymap.set("n", "<Leader>g", function()
-        telescope_builtin.live_grep({ cwd = GetTelescopeDir() })
+        telescope_builtin.live_grep({ cwd = GetRootDir() })
       end)
 
       require("telescope").setup({
@@ -475,7 +475,7 @@ require("lazy").setup({
       local neogit = require('neogit')
 
       vim.keymap.set("n", "<Leader>cg", function()
-        neogit.open({ cwd = GetBufferDir(), kind = "floating" })
+        neogit.open({ cwd = GetRootDir(), kind = "floating" })
       end)
     end,
   },
