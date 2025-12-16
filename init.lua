@@ -6,14 +6,6 @@ if current_dir == wsl_root or current_dir == win_root then
   vim.cmd("cd " .. vim.fn.expand("~"))
 end
 
-if vim.fn.has('nvim') == 1 then
-  vim.fn.serverstart('/tmp/nvimsocket')
-end
-
-if vim.fn.has('nvim') == 1 and vim.fn.executable('nvr') == 1 then
-  vim.env.GIT_EDITOR = "nvr --remote-tab-wait +'set bufhidden=wipe'"
-end
-
 local lazypath = vim.fn.stdpath("data") .. "/lazy/lazy.nvim"
 
 ---@diagnostic disable-next-line: undefined-field
@@ -373,8 +365,8 @@ require("lazy").setup({
     event = "VeryLazy",
     config = function(_, opts)
       local toggleterm = require("toggleterm")
-      local harpoon = require("harpoon")
 
+      local harpoon = require("harpoon")
       local function close_harpoon_menu()
         if harpoon.ui.win_id and vim.api.nvim_win_is_valid(harpoon.ui.win_id) then
           harpoon.ui:close_menu()
@@ -412,18 +404,14 @@ require("lazy").setup({
       vim.keymap.set("n", "<C-2>", switch_terminal(2))
       vim.keymap.set("n", "<C-3>", switch_terminal(3))
 
-      local keymap_opts = { noremap = true, silent = true }
-      function _G.set_terminal_keymaps(term)
-        if term.cmd ~= 'lazygit' then
-          vim.api.nvim_buf_set_keymap(term.bufnr, 't', '<esc>', [[<C-\><C-n>]], keymap_opts)
-        end
-
+      function _G.set_terminal_keymaps()
         vim.keymap.set("t", "<C-d>", "<Nop>")
         vim.keymap.set("t", "<C-S-v>", [[<C-\><C-n>"+pa]])
         vim.keymap.set("t", "<C-S-d>", switch_terminal(0))
         vim.keymap.set("t", "<C-1>", switch_terminal(1))
         vim.keymap.set("t", "<C-2>", switch_terminal(2))
         vim.keymap.set("t", "<C-3>", switch_terminal(3))
+        vim.keymap.set("t", "<esc>", [[<C-\><C-n>]])
       end
 
       opts.on_open = set_terminal_keymaps
@@ -455,20 +443,6 @@ require("lazy").setup({
       vim.keymap.set("n", "<C-n>", function() harpoon:list():select(3) end)
       vim.keymap.set("n", "<C-s>", function() harpoon:list():select(4) end)
     end,
-  },
-  {
-    "kdheepak/lazygit.nvim",
-    cmd = {
-      "LazyGitConfig",
-      "LazyGitCurrentFile",
-    },
-    dependencies = { "nvim-lua/plenary.nvim" },
-    keys = {
-      { "<leader>lg", "<cmd>LazyGitCurrentFile<cr>" }
-    },
-    config = function()
-      vim.g.lazygit_floating_window_scaling_factor = 0.8
-    end
   },
   {
     "kylechui/nvim-surround",

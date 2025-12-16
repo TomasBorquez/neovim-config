@@ -25,7 +25,7 @@ def setup_linux():
     run_command("sudo apt update")
 
     packages = {
-        "Essential build tools": ["build-essential", "cmake", "curl", "wget", "git", "lazygit"],
+        "Essential build tools": ["build-essential", "cmake", "curl", "wget", "git"],
         "Mason dependencies": ["unzip", "python3-pip", "python3-venv", "ripgrep"],
         "Go": ["golang-go"],
         "C/C++ tools": ["clang", "gdb", "valgrind"]
@@ -53,7 +53,7 @@ def setup_windows():
         sys.exit(1)
 
     packages = {
-        "Essential build tools": ["mingw", "cmake", "curl", "wget", "git", "lazygit"],
+        "Essential build tools": ["mingw", "cmake", "curl", "wget", "git"],
         "Mason dependencies": ["unzip", "ripgrep"],
         "Go": ["go"],
         "Node.js": ["nodejs"],
