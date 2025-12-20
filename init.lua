@@ -26,139 +26,6 @@ require("keymaps")
 require("utils")
 require("lazy").setup({
   {
-    "sainnhe/gruvbox-material",
-    priority = 1000,
-    config = function()
-      vim.g.gruvbox_material_better_performance = 1
-      vim.g.gruvbox_material_disable_italic_comment = 1
-      vim.cmd.colorscheme("gruvbox-material")
-
-      vim.cmd([[
-        highlight FloatShadow gui=NONE
-        highlight MatchParen guibg=#504945 gui=NONE guisp=NONE
-
-        highlight Normal guibg=#191919
-        highlight StatusLine guibg=#0D0D0D
-
-        highlight TelescopeNormal guibg=#0F0F0F
-        highlight TelescopeBorder guibg=#0F0F0F
-
-        highlight Pmenu guibg=#0D0D0D
-        highlight NormalFloat guibg=#0D0D0D
-        highlight CursorLine guibg=#0D0D0D
-
-        highlight FloatBorder guibg=#0B0B0B
-      ]])
-    end,
-  },
-  {
-    "nvim-treesitter/nvim-treesitter",
-    build = ":TSUpdate",
-    config = function()
-      vim.filetype.add({
-        extension = {
-          tmpl = "gotmpl",
-
-          glsl = "glsl",
-          vert = "glsl",
-          frag = "glsl",
-        },
-      })
-
-      require("nvim-treesitter.configs").setup({
-        modules = {},
-        sync_install = false,
-        auto_install = true,
-        ignore_install = {},
-        parser_install_dir = nil,
-        ensure_installed = { "glsl", "gdscript", "godot_resource", "gdshader", "c", "cpp", "javascript", "typescript", "go", "gotmpl", "html" },
-        highlight = {
-          enable = true,
-        },
-        incremental_selection = {
-          enable = true,
-        },
-        indent = {
-          enable = false,
-        },
-      })
-    end,
-  },
-  {
-    "nvim-telescope/telescope.nvim",
-    dependencies = {
-      { "nvim-lua/plenary.nvim" },
-      { "nvim-telescope/telescope-fzf-native.nvim", build = "make" }
-    },
-    config = function()
-      local telescope_builtin = require("telescope.builtin")
-
-      vim.keymap.set("n", "<Leader>f", function()
-        telescope_builtin.find_files({ cwd = GetRootDir() })
-      end)
-      vim.keymap.set("n", "<Leader>g", function()
-        telescope_builtin.live_grep({ cwd = GetRootDir() })
-      end)
-
-      require("telescope").setup({
-        defaults = {
-          preview = {
-            treesitter = false,
-          },
-          file_ignore_patterns = { "^.git/", "node_modules" },
-          vimgrep_arguments = {
-            "rg",
-            "--color=never",
-            "--no-heading",
-            "--with-filename",
-            "--line-number",
-            "--column",
-            "--smart-case",
-            "--hidden",
-          },
-        },
-        extensions = {
-          fzf = {
-            fuzzy = true,
-            override_generic_sorter = true,
-            override_file_sorter = true,
-            case_mode = "smart_case",
-          }
-        }
-      })
-
-      require('telescope').load_extension('fzf')
-    end
-  },
-  {
-    "stevearc/oil.nvim",
-    lazy = false,
-    dependencies = { "nvim-tree/nvim-web-devicons" },
-    config = function()
-      require("oil").setup({
-        view_options = {
-          show_hidden = true,
-          is_always_hidden = function(name)
-            return vim.endswith(name, ".uid")
-          end,
-        },
-        use_default_keymaps = false,
-        keymaps = {
-          ["<CR>"] = "actions.select",
-          ["<leader>p"] = "actions.preview",
-          ["<leader>r"] = "actions.refresh",
-        },
-      })
-
-      vim.api.nvim_create_autocmd("FileType", {
-        pattern = "oil",
-        callback = function()
-          require("cmp").setup.buffer({ enabled = false })
-        end,
-      })
-    end,
-  },
-  {
     "neovim/nvim-lspconfig",
     version = "v2.5.0",
     event = { "BufReadPre", "BufNewFile" },
@@ -269,13 +136,13 @@ require("lazy").setup({
           async = true,
           range = { start = { line, 0 }, ["end"] = { line, 0 } },
         })
-      end, { desc = "Format line you are on" })
+      end)
 
       local key = vim.api.nvim_replace_termcodes("<Esc>", true, false, true)
       vim.keymap.set("v", "<C-f>", function()
         conform.format({ lsp_fallback = true, async = true })
-        vim.api.nvim_feedkeys(key, "n", false)
-      end, { desc = "Format buffer" })
+        vim.api.nvim_feedkeys(key, "n", false) -- presses escape
+      end)
 
       vim.keymap.set("n", "<leader>m", function()
         vim.diagnostic.jump({ count = 1 })
@@ -299,7 +166,6 @@ require("lazy").setup({
 
       --[[ LuaSnip ]]
       local ls = require("luasnip")
-
       ls.config.set_config({
         history = true,
         update_events = "TextChanged,TextChangedI",
@@ -339,12 +205,6 @@ require("lazy").setup({
       })
     end,
   },
-  {
-    "windwp/nvim-ts-autotag",
-    event = "InsertEnter",
-    ft = { "html", "javascript", "javascriptreact", "typescript", "typescriptreact", "svelte", "vue", "xml" },
-  },
-  { "folke/lazydev.nvim", ft = "lua", opts = {} },
   {
     "akinsho/toggleterm.nvim",
     version = "*",
@@ -419,13 +279,136 @@ require("lazy").setup({
     end,
   },
   {
-    "rmagatti/auto-session",
-    lazy = false,
+    "nvim-telescope/telescope.nvim",
+    dependencies = {
+      { "nvim-lua/plenary.nvim" },
+      { "nvim-telescope/telescope-fzf-native.nvim", build = "make" }
+    },
     config = function()
-      require("auto-session").setup({
-        auto_restore_last_session = true,
+      local telescope_builtin = require("telescope.builtin")
+      vim.keymap.set("n", "<Leader>f", function()
+        telescope_builtin.find_files({ cwd = GetRootDir() })
+      end)
+      vim.keymap.set("n", "<Leader>g", function()
+        telescope_builtin.live_grep({ cwd = GetRootDir() })
+      end)
+
+      local telescope = require("telescope")
+      telescope.setup({
+        defaults = {
+          preview = {
+            treesitter = false,
+          },
+          file_ignore_patterns = { "^.git/", "node_modules" },
+          vimgrep_arguments = {
+            "rg",
+            "--color=never",
+            "--no-heading",
+            "--with-filename",
+            "--line-number",
+            "--column",
+            "--smart-case",
+            "--hidden",
+          },
+        },
+        extensions = {
+          fzf = {
+            fuzzy = true,
+            override_generic_sorter = true,
+            override_file_sorter = true,
+            case_mode = "smart_case",
+          }
+        }
       })
+
+      telescope.load_extension('fzf')
     end
+  },
+  {
+    "nvim-treesitter/nvim-treesitter",
+    build = ":TSUpdate",
+    config = function()
+      vim.filetype.add({
+        extension = {
+          glsl = "glsl",
+          vert = "glsl",
+          frag = "glsl",
+        },
+      })
+
+      require("nvim-treesitter.configs").setup({
+        modules = {},
+        sync_install = false,
+        auto_install = true,
+        ignore_install = {},
+        parser_install_dir = nil,
+        ensure_installed = { "glsl", "gdscript", "godot_resource", "gdshader", "c", "cpp", "javascript", "typescript", "go", "html" },
+        highlight = {
+          enable = true,
+        },
+        incremental_selection = {
+          enable = true,
+        },
+        indent = {
+          enable = false,
+        },
+      })
+    end,
+  },
+  {
+    "stevearc/oil.nvim",
+    lazy = false,
+    dependencies = { "nvim-tree/nvim-web-devicons" },
+    config = function()
+      require("oil").setup({
+        view_options = {
+          show_hidden = true,
+          is_always_hidden = function(name)
+            return vim.endswith(name, ".uid")
+          end,
+        },
+        use_default_keymaps = false,
+        keymaps = {
+          ["<CR>"] = "actions.select",
+          ["<leader>p"] = "actions.preview",
+          ["<leader>r"] = "actions.refresh",
+        },
+      })
+
+      local cmp = require("cmp")
+      vim.api.nvim_create_autocmd("FileType", {
+        pattern = "oil",
+        callback = function()
+          cmp.setup.buffer({ enabled = false })
+        end,
+      })
+    end,
+  },
+  {
+    "sainnhe/gruvbox-material",
+    priority = 1000,
+    config = function()
+      vim.g.gruvbox_material_better_performance = 1
+      vim.g.gruvbox_material_disable_italic_comment = 1
+      vim.cmd.colorscheme("gruvbox-material")
+
+      local highlights = {
+        FloatShadow = {},
+        MatchParen = { bg = "#504945", sp = "NONE" },
+        Normal = { bg = "#191919" },
+        StatusLine = { bg = "#0D0D0D" },
+        TelescopeNormal = { bg = "#0F0F0F" },
+        TelescopeBorder = { bg = "#0F0F0F" },
+        Pmenu = { bg = "#0D0D0D" },
+        NormalFloat = { bg = "#0D0D0D" },
+        CursorLine = { bg = "#0D0D0D" },
+        FloatBorder = { bg = "#0B0B0B" },
+      }
+
+      for group, opts in pairs(highlights) do
+        vim.api.nvim_set_hl(0, group, opts)
+      end
+    end,
   },
   {
     "ThePrimeagen/harpoon",
@@ -460,14 +443,14 @@ require("lazy").setup({
       })
     end
   },
-  { -- TODO: Rewrite myself as a util
-    "machakann/vim-highlightedyank",
-    event = "VeryLazy",
+  {
+    "rmagatti/auto-session",
+    lazy = false,
     config = function()
-      vim.g.highlightedyank_highlight_duration = 300
-      vim.cmd([[ highlight HighlightedyankRegion guibg=#335533 guifg=NONE gui=NONE ctermbg=green ctermfg=NONE ]])
-      vim.g.highlightedyank_highlight_group = "HighlightedyankRegion"
-    end,
+      require("auto-session").setup({
+        auto_restore_last_session = true,
+      })
+    end
   },
   {
     "folke/todo-comments.nvim",
@@ -475,17 +458,12 @@ require("lazy").setup({
     opts = { signs = false }
   },
   {
-    "windwp/nvim-autopairs",
-    config = function()
-      require("nvim-autopairs").setup()
-    end
+    "windwp/nvim-ts-autotag",
+    event = "InsertEnter",
+    ft = { "html", "javascript", "javascriptreact", "typescript", "typescriptreact", "svelte", "vue", "xml" },
   },
-  {
-    "numToStr/Comment.nvim",
-    event = "VeryLazy",
-    config = function()
-      require("Comment").setup()
-    end,
-  }
+  { "numToStr/Comment.nvim", event = "VeryLazy" },
+  { "folke/lazydev.nvim", ft = "lua", opts = {} },
+  { "windwp/nvim-autopairs" },
 })
 require("commands")
