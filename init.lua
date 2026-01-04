@@ -47,7 +47,7 @@ require("lazy").setup({
       local capabilities = require("cmp_nvim_lsp").default_capabilities()
 
       require("mason-lspconfig").setup({
-        ensure_installed = { "lua_ls", "clangd", "glsl_analyzer", "tsserver", "svelte", "biome", "gopls" },
+        ensure_installed = { "lua_ls", "clangd", "glsl_analyzer", "tsserver", "svelte", "biome", "gopls", "rust_analyzer" },
       })
 
       local mason_registry = require("mason-registry")
@@ -107,7 +107,21 @@ require("lazy").setup({
         },
       })
 
-      vim.lsp.enable({ "lua_ls", "clangd", "glsl_analyzer", "ts_ls", "biome", "svelte", "gopls" })
+      vim.lsp.config("rust_analyzer", {
+        capabilities = capabilities,
+        settings = {
+          ["rust-analyzer"] = {
+            cargo = {
+              allFeatures = true,
+            },
+            check = {
+              command = "clippy",
+            }
+          },
+        },
+      })
+
+      vim.lsp.enable({ "lua_ls", "clangd", "glsl_analyzer", "ts_ls", "biome", "svelte", "gopls", "rust_analyzer" })
 
       --[[ Conform ]]
       local conform = require("conform")
@@ -392,17 +406,19 @@ require("lazy").setup({
       vim.g.gruvbox_material_disable_italic_comment = 1
       vim.cmd.colorscheme("gruvbox-material")
 
+      local fg = vim.api.nvim_get_hl(0, { name = "Normal" }).fg
+
       local highlights = {
         FloatShadow = {},
         MatchParen = { bg = "#504945", sp = "NONE" },
-        Normal = { bg = "#191919" },
-        StatusLine = { bg = "#0D0D0D" },
-        TelescopeNormal = { bg = "#0F0F0F" },
-        TelescopeBorder = { bg = "#0F0F0F" },
-        Pmenu = { bg = "#0D0D0D" },
-        NormalFloat = { bg = "#0D0D0D" },
+        Normal = { bg = "#191919", fg = fg },
+        StatusLine = { bg = "#0D0D0D", fg = fg },
+        TelescopeNormal = { bg = "#0F0F0F", fg = fg },
+        TelescopeBorder = { bg = "#0F0F0F", fg = fg },
+        Pmenu = { bg = "#0D0D0D", fg = fg },
+        NormalFloat = { bg = "#0D0D0D", fg = fg },
         CursorLine = { bg = "#0D0D0D" },
-        FloatBorder = { bg = "#0B0B0B" },
+        FloatBorder = { bg = "#0B0B0B", fg = fg },
       }
 
       for group, opts in pairs(highlights) do
@@ -453,6 +469,13 @@ require("lazy").setup({
     end
   },
   {
+    "windwp/nvim-autopairs",
+    event = "InsertEnter",
+    config = function()
+      require("nvim-autopairs").setup({})
+    end,
+  },
+  {
     "folke/todo-comments.nvim",
     dependencies = { "nvim-lua/plenary.nvim" },
     opts = { signs = false }
@@ -464,6 +487,5 @@ require("lazy").setup({
   },
   { "numToStr/Comment.nvim", event = "VeryLazy" },
   { "folke/lazydev.nvim", ft = "lua", opts = {} },
-  { "windwp/nvim-autopairs" },
 })
 require("commands")
