@@ -223,8 +223,6 @@ require("lazy").setup({
     "akinsho/toggleterm.nvim",
     version = "*",
     opts = {
-      -- INFO: Config for Gitbash:
-      -- shell = "C:\\Users\\eveti\\scoop\\apps\\git\\current\\bin\\bash.exe",
       direction = "float",
       close_on_exit = true,
       float_opts = {
@@ -239,6 +237,11 @@ require("lazy").setup({
     event = "VeryLazy",
     config = function(_, opts)
       local toggleterm = require("toggleterm")
+
+      if IsWindows() then
+        -- INFO: Config for Gitbash:
+        opts.shell = "C:\\Users\\eveti\\scoop\\apps\\git\\current\\bin\\bash.exe"
+      end
 
       local harpoon = require("harpoon")
       local function close_harpoon_menu()
