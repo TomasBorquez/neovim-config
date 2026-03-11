@@ -39,7 +39,7 @@ else
   vim.api.nvim_create_user_command('Programming', ':Oil ~/programming/learn/', {})
   vim.api.nvim_create_user_command('Ideas', ':Oil ~/programming/ideas/', {})
   vim.api.nvim_create_user_command('Bashrc', ':e ~/.bashrc', {})
-  vim.api.nvim_create_user_command('Linux', ':Oil ~/programming/learn/linux/', {})
+  vim.api.nvim_create_user_command('Kernel', ':Oil ~/programming/learn/kernel/', {})
   vim.api.nvim_create_user_command('VM', ':Oil ~/programming/learn/qemu-kernel-vm/', {})
 end
 

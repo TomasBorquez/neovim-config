@@ -67,7 +67,7 @@ require("lazy").setup({
           "--header-insertion=never",
           "--query-driver=**",
         },
-        filetypes = { "c", "h" },
+        filetypes = { "c", "h", "cpp", "hpp" },
         capabilities = capabilities,
         init_options = { compilationDatabasePath = "./build" },
       })
