@@ -4,7 +4,8 @@ I've already installed, even if they come with flashy new features or whatever, 
 need to update something. In fact updating _usually_ breaks everything at the moment, so no updates coming ever :)
 
 **Versions**:
-- Neovim 0.11.4
+- Neovide 0.16.0
+- Neovim 0.12.0
 - OS: Windows / Linux
 
 ## Philosophy
@@ -15,7 +16,7 @@ Simplicity above all, meaning:
 - Whenever I feel I need a plugin look for native alternatives, develop it myself or avoid temptation from the evil :)
 
 ## Setup
-Download [nvim 0.11.4](https://github.com/neovim/neovim/releases/tag/v0.11.4) like this on linux: 
+Download [nvim 0.12.0](https://github.com/neovim/neovim/releases/tag/v0.12.0) like this on linux: 
 ```bash
 # if you already installed it through apt:
 # sudo apt remove neovim

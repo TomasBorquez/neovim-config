@@ -1,7 +1,7 @@
 -- Auto Commands
-vim.api.nvim_create_autocmd('BufWinEnter', {
+vim.api.nvim_create_autocmd("BufWinEnter", {
   callback = function()
-    vim.opt.formatoptions:remove({ 'c', 'o' })
+    vim.opt.formatoptions:remove({ "c", "o" })
   end
 })
 
@@ -25,22 +25,22 @@ vim.api.nvim_create_autocmd("TextYankPost", {
 })
 
 -- User Commands
-local is_windows = vim.fn.has('win32') == 1 or vim.fn.has('win64') == 1
+local is_windows = vim.fn.has("win32") == 1 or vim.fn.has("win64") == 1
 if is_windows then
-  vim.api.nvim_create_user_command('Shada', ':Oil ~/AppData/Local/nvim-data/shada/', {})
-  vim.api.nvim_create_user_command('Config', ':Oil ~/AppData/Local/nvim/', {})
-  vim.api.nvim_create_user_command('Programming', ':Oil ~/Programming/learn/', {})
-  vim.api.nvim_create_user_command('Ideas', ':Oil ~/programming/ideas/', {})
-  vim.api.nvim_create_user_command('Bashrc', ':e ~/.bashrc', {})
-  vim.api.nvim_create_user_command('AppData', ':Oil ~/AppData/', {})
+  vim.api.nvim_create_user_command("Shada", ":Oil ~/AppData/Local/nvim-data/shada/", {})
+  vim.api.nvim_create_user_command("Config", ":Oil ~/AppData/Local/nvim/", {})
+  vim.api.nvim_create_user_command("Programming", ":Oil ~/Programming/learn/", {})
+  vim.api.nvim_create_user_command("Ideas", ":Oil ~/programming/ideas/", {})
+  vim.api.nvim_create_user_command("Bashrc", ":e ~/.bashrc", {})
+  vim.api.nvim_create_user_command("AppData", ":Oil ~/AppData/", {})
 else
-  vim.api.nvim_create_user_command('Shada', ':Oil ~/.local/state/nvim/shada/', {})
-  vim.api.nvim_create_user_command('Config', ':Oil ~/.config/nvim/', {})
-  vim.api.nvim_create_user_command('Programming', ':Oil ~/programming/learn/', {})
-  vim.api.nvim_create_user_command('Ideas', ':Oil ~/programming/ideas/', {})
-  vim.api.nvim_create_user_command('Bashrc', ':e ~/.bashrc', {})
-  vim.api.nvim_create_user_command('Kernel', ':Oil ~/programming/learn/kernel/', {})
-  vim.api.nvim_create_user_command('VM', ':Oil ~/programming/learn/qemu-kernel-vm/', {})
+  vim.api.nvim_create_user_command("Shada", ":Oil ~/.local/state/nvim/shada/", {})
+  vim.api.nvim_create_user_command("Config", ":Oil ~/.config/nvim/", {})
+  vim.api.nvim_create_user_command("Programming", ":Oil ~/programming/learn/", {})
+  vim.api.nvim_create_user_command("Ideas", ":Oil ~/programming/ideas/", {})
+  vim.api.nvim_create_user_command("Bashrc", ":e ~/.bashrc", {})
+  vim.api.nvim_create_user_command("Kernel", ":Oil ~/programming/learn/kernel/", {})
+  vim.api.nvim_create_user_command("VM", ":Oil ~/programming/learn/qemu-kernel-vm/", {})
 end
 
 -- Screenshot/Presentation Mode Toggle
@@ -49,7 +49,7 @@ local screenshot_mode = false
 vim.cmd("highlight GHint guifg=#8D73F5 ctermfg=98 gui=bold cterm=bold")
 vim.cmd("highlight RHint guifg=#F57373 ctermfg=98 gui=bold cterm=bold")
 
-vim.api.nvim_create_user_command('ScreenshotMode', function()
+vim.api.nvim_create_user_command("ScreenshotMode", function()
   screenshot_mode = not screenshot_mode
 
   if screenshot_mode then
@@ -80,6 +80,6 @@ vim.api.nvim_create_user_command('ScreenshotMode', function()
   end
 end, {})
 
-vim.api.nvim_create_user_command('MatchClear', function()
+vim.api.nvim_create_user_command("MatchClear", function()
   vim.fn.clearmatches()
 end, {})

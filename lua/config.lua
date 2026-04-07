@@ -1,7 +1,8 @@
-vim.o.guifont = "Comic Mono:h14:#e-subpixelantialias"
+vim.o.guifont = "Comic Mono:h18:#e-antialias"
 vim.o.sessionoptions = "blank,buffers,curdir,folds,help,tabpages,winsize,winpos,terminal,localoptions"
 vim.g.mapleader = " "
 vim.g.c_syntax_for_h = 1 -- detect .h files
+vim.opt.syntax = "off"
 vim.opt.number = true
 vim.opt.relativenumber = true
 vim.opt.ignorecase = true
@@ -21,19 +22,19 @@ vim.opt.list = true
 vim.opt.listchars:append({ tab = "  ", trail = "·" })
 vim.bo.fileformat = "unix"
 
-if vim.fn.has('win32') == 1 or vim.fn.has('win64') == 1 then
+if vim.fn.has("win32") == 1 or vim.fn.has("win64") == 1 then
   vim.opt.swapfile = false
 end
 
 vim.g.clipboard = {
-  name = 'win32yank',
+  name = "win32yank",
   copy = {
-    ['+'] = 'win32yank.exe -i --crlf',
-    ['*'] = 'win32yank.exe -i --crlf',
+    ["+"] = "win32yank.exe -i --crlf",
+    ["*"] = "win32yank.exe -i --crlf",
   },
   paste = {
-    ['+'] = 'win32yank.exe -o --lf',
-    ['*'] = 'win32yank.exe -o --lf',
+    ["+"] = "win32yank.exe -o --lf",
+    ["*"] = "win32yank.exe -o --lf",
   },
   cache_enabled = 0,
 }

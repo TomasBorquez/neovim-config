@@ -47,10 +47,11 @@ require("lazy").setup({
       local capabilities = require("cmp_nvim_lsp").default_capabilities()
 
       require("mason-lspconfig").setup({
-        ensure_installed = { "lua_ls", "clangd", "glsl_analyzer", "tsserver", "svelte", "biome", "gopls", "rust_analyzer" },
+        ensure_installed = { "lua_ls", "clangd", "glsl_analyzer", "tsserver", "svelte", "biome", "gopls" },
       })
 
       local mason_registry = require("mason-registry")
+
       if not mason_registry.is_installed("clang-format") then
         vim.cmd("MasonInstall clang-format")
       end
@@ -69,7 +70,6 @@ require("lazy").setup({
         },
         filetypes = { "c", "h", "cpp", "hpp" },
         capabilities = capabilities,
-        init_options = { compilationDatabasePath = "./build" },
       })
 
       vim.lsp.config("glsl_analyzer", {
@@ -107,21 +107,7 @@ require("lazy").setup({
         },
       })
 
-      vim.lsp.config("rust_analyzer", {
-        capabilities = capabilities,
-        settings = {
-          ["rust-analyzer"] = {
-            cargo = {
-              allFeatures = true,
-            },
-            check = {
-              command = "clippy",
-            }
-          },
-        },
-      })
-
-      vim.lsp.enable({ "lua_ls", "clangd", "glsl_analyzer", "ts_ls", "biome", "svelte", "gopls", "rust_analyzer" })
+      vim.lsp.enable({ "lua_ls", "clangd", "glsl_analyzer", "ts_ls", "biome", "svelte", "gopls" })
 
       --[[ Conform ]]
       local conform = require("conform")
@@ -338,11 +324,12 @@ require("lazy").setup({
         }
       })
 
-      telescope.load_extension('fzf')
+      telescope.load_extension("fzf")
     end
   },
   {
     "nvim-treesitter/nvim-treesitter",
+    branch = "main",
     build = ":TSUpdate",
     config = function()
       vim.filetype.add({
@@ -352,23 +339,20 @@ require("lazy").setup({
           frag = "glsl",
         },
       })
-
-      require("nvim-treesitter.configs").setup({
-        modules = {},
-        sync_install = false,
+      require("nvim-treesitter").setup({
+        ensure_installed = { "glsl", "c", "cpp", "javascript", "typescript", "go", "html", "lua" },
         auto_install = true,
-        ignore_install = {},
-        parser_install_dir = nil,
-        ensure_installed = { "glsl", "gdscript", "godot_resource", "gdshader", "c", "cpp", "javascript", "typescript", "go", "html" },
-        highlight = {
-          enable = true,
-        },
-        incremental_selection = {
-          enable = true,
-        },
-        indent = {
-          enable = false,
-        },
+        indent = { enable = false },
+      })
+      vim.api.nvim_create_autocmd("FileType", {
+        group = vim.api.nvim_create_augroup("treesitter_highlight", { clear = true }),
+        pattern = "*",
+        callback = function(event)
+          if vim.bo[event.buf].filetype == "oil" then
+            return
+          end
+          pcall(vim.treesitter.start, event.buf)
+        end,
       })
     end,
   },
@@ -410,7 +394,6 @@ require("lazy").setup({
       vim.cmd.colorscheme("gruvbox-material")
 
       local fg = vim.api.nvim_get_hl(0, { name = "Normal" }).fg
-
       local highlights = {
         FloatShadow = {},
         MatchParen = { bg = "#504945", sp = "NONE" },
