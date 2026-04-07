@@ -36,8 +36,10 @@
 - [x] Create a setup script
 - [x] Add multiple terminals
 - [x] Remove yank highlight plugin
+- [x] Add win2yank to setup.py
 - [ ] Rename repo to `dotfiles` and add all config files
 - [ ] Add spelling keybinds
+- [ ] Add nvim installation in setup.py
 
 ## Motions Notes
 - [x] `<C-o>` For previous place where the cursor was at 

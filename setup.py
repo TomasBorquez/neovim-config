@@ -19,6 +19,24 @@ def run_command(cmd: str, shell = False):
 def check_command_exists(cmd: str):
     return shutil.which(cmd) is not None
 
+def install_win32yank():
+    """Install win32yank for WSL clipboard support"""
+    print("\nInstalling win32yank for clipboard support...")
+    commands = [
+        "curl -sLo /tmp/win32yank.zip https://github.com/equalsraf/win32yank/releases/download/v0.1.1/win32yank-x64.zip",
+        "unzip -p /tmp/win32yank.zip win32yank.exe > /tmp/win32yank.exe",
+        "chmod +x /tmp/win32yank.exe",
+        "sudo mv /tmp/win32yank.exe /usr/local/bin/"
+    ]
+
+    for cmd in commands:
+        if not run_command(cmd, shell=True):
+            print(f"Warning: Failed to install win32yank")
+            return False
+
+    print("win32yank installed successfully")
+    return True
+
 def setup_linux():
     print("Detected Linux/WSL")
     print("\nUpdating package lists...")
@@ -39,8 +57,11 @@ def setup_linux():
     print("\nInstalling Node.js...")
     run_command("curl -fsSL https://deb.nodesource.com/setup_lts.x | sudo -E bash -", shell=True)
     run_command("sudo apt install -y nodejs")
+
     print("Changing timezone to Argentina, Buenos Aires")
     run_command("sudo timedatectl set-timezone America/Argentina/Buenos_Aires")
+
+    install_win32yank()
 
 def setup_windows():
     print("Detected Windows")
