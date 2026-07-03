@@ -333,25 +333,19 @@ require("lazy").setup({
     build = ":TSUpdate",
     config = function()
       vim.filetype.add({
-        extension = {
-          glsl = "glsl",
-          vert = "glsl",
-          frag = "glsl",
-        },
+        extension = { glsl = "glsl", vert = "glsl", frag = "glsl" },
       })
-      require("nvim-treesitter").setup({
-        ensure_installed = { "glsl", "c", "cpp", "javascript", "typescript", "go", "html", "lua" },
-        auto_install = true,
-        indent = { enable = false },
-      })
+
+      require("nvim-treesitter").setup()
+
       vim.api.nvim_create_autocmd("FileType", {
         group = vim.api.nvim_create_augroup("treesitter_highlight", { clear = true }),
-        pattern = "*",
-        callback = function(event)
-          if vim.bo[event.buf].filetype == "oil" then
+        callback = function(ev)
+          if vim.bo[ev.buf].filetype == "oil" then
             return
           end
-          pcall(vim.treesitter.start, event.buf)
+
+          pcall(vim.treesitter.start, ev.buf)
         end,
       })
     end,
@@ -446,6 +440,20 @@ require("lazy").setup({
     end
   },
   {
+    "windwp/nvim-ts-autotag",
+    dependencies = { "nvim-treesitter/nvim-treesitter" },
+    ft = { "html", "javascript", "javascriptreact", "typescript", "typescriptreact", "svelte", "vue", "xml" },
+    config = function()
+      require("nvim-ts-autotag").setup({
+        opts = {
+          enable_close = true,
+          enable_rename = true,
+          enable_close_on_slash = true
+        },
+      })
+    end,
+  },
+  {
     "rmagatti/auto-session",
     lazy = false,
     config = function()
@@ -465,11 +473,6 @@ require("lazy").setup({
     "folke/todo-comments.nvim",
     dependencies = { "nvim-lua/plenary.nvim" },
     opts = { signs = false }
-  },
-  {
-    "windwp/nvim-ts-autotag",
-    event = "InsertEnter",
-    ft = { "html", "javascript", "javascriptreact", "typescript", "typescriptreact", "svelte", "vue", "xml" },
   },
   { "numToStr/Comment.nvim", event = "VeryLazy" },
   { "folke/lazydev.nvim", ft = "lua", opts = {} },
