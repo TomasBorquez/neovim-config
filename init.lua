@@ -289,11 +289,27 @@ require("lazy").setup({
     },
     config = function()
       local telescope_builtin = require("telescope.builtin")
+
+      local function resume_or_open(title, open)
+        local cached = require("telescope.state").get_global_key("cached_pickers") or {}
+        for i, picker in ipairs(cached) do
+          if picker.prompt_title == title then
+            telescope_builtin.resume({ cache_index = i })
+            return
+          end
+        end
+        open()
+      end
+
       vim.keymap.set("n", "<Leader>f", function()
-        telescope_builtin.find_files({ cwd = GetRootDir() })
+        resume_or_open("Find Files", function()
+          telescope_builtin.find_files({ cwd = GetRootDir() })
+        end)
       end)
       vim.keymap.set("n", "<Leader>g", function()
-        telescope_builtin.live_grep({ cwd = GetRootDir() })
+        resume_or_open("Live Grep", function()
+          telescope_builtin.live_grep({ cwd = GetRootDir() })
+        end)
       end)
 
       local telescope = require("telescope")
@@ -302,7 +318,10 @@ require("lazy").setup({
           preview = {
             treesitter = false,
           },
-          file_ignore_patterns = { "^.git/", "node_modules" },
+          cache_picker = {
+            num_pickers = 10,
+          },
+          file_ignore_patterns = { "^.git/", "node_modules", "%.meta$" },
           vimgrep_arguments = {
             "rg",
             "--color=never",
@@ -312,6 +331,8 @@ require("lazy").setup({
             "--column",
             "--smart-case",
             "--hidden",
+            "--fixed-strings",
+            "--trim",
           },
         },
         extensions = {
@@ -323,7 +344,6 @@ require("lazy").setup({
           }
         }
       })
-
       telescope.load_extension("fzf")
     end
   },
