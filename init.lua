@@ -293,9 +293,10 @@ require("lazy").setup({
       local telescope_state = require("telescope.state")
 
       local function resume_or_open(title, open)
+        local root = GetRootDir()
         local cached = telescope_state.get_global_key("cached_pickers") or {}
         for i, picker in ipairs(cached) do
-          if picker.prompt_title == title then
+          if picker.prompt_title == title and picker.cwd == root then
             telescope_builtin.resume({ cache_index = i })
             return
           end
