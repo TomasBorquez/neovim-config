@@ -159,6 +159,7 @@ require("lazy").setup({
           local opts = { buffer = args.buf }
           vim.keymap.set("n", "gd", vim.lsp.buf.definition, opts)
           vim.keymap.set("n", "gh", vim.lsp.buf.hover, opts)
+          vim.keymap.set("n", "gm", vim.diagnostic.open_float, opts)
           vim.keymap.set("n", "<leader>r", vim.lsp.buf.rename, opts)
           vim.keymap.set("n", "<C-.>", vim.lsp.buf.code_action, opts)
         end,
@@ -289,9 +290,10 @@ require("lazy").setup({
     },
     config = function()
       local telescope_builtin = require("telescope.builtin")
+      local telescope_state = require("telescope.state")
 
       local function resume_or_open(title, open)
-        local cached = require("telescope.state").get_global_key("cached_pickers") or {}
+        local cached = telescope_state.get_global_key("cached_pickers") or {}
         for i, picker in ipairs(cached) do
           if picker.prompt_title == title then
             telescope_builtin.resume({ cache_index = i })
