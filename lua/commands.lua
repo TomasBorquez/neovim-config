@@ -31,6 +31,7 @@ if is_windows then
   vim.api.nvim_create_user_command("Config", ":Oil ~/AppData/Local/nvim/", {})
   vim.api.nvim_create_user_command("Programming", ":Oil ~/Programming/learn/", {})
   vim.api.nvim_create_user_command("Ideas", ":Oil ~/programming/ideas/", {})
+  vim.api.nvim_create_user_command("Videos", ":Oil ~/programming/videos/", {})
   vim.api.nvim_create_user_command("Bashrc", ":e ~/.bashrc", {})
   vim.api.nvim_create_user_command("AppData", ":Oil ~/AppData/", {})
 else
