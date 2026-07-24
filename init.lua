@@ -60,14 +60,20 @@ require("lazy").setup({
         capabilities = capabilities,
       })
 
+      local clangd_cmd = {
+        "clangd",
+        "--background-index",
+        "--clang-tidy",
+        "--header-insertion=never",
+        "--query-driver=**",
+      }
+
+      if IsWindows() then
+        table.insert(clangd_cmd, "--target=x86_64-w64-mingw32")
+      end
+
       vim.lsp.config("clangd", {
-        cmd = {
-          "clangd",
-          "--background-index",
-          "--clang-tidy",
-          "--header-insertion=never",
-          "--query-driver=**",
-        },
+        cmd = clangd_cmd,
         filetypes = { "c", "h", "cpp", "hpp" },
         capabilities = capabilities,
       })
