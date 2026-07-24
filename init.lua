@@ -305,11 +305,18 @@ require("lazy").setup({
       end
 
       vim.keymap.set("n", "<Leader>f", function()
+        telescope_builtin.find_files({ cwd = GetRootDir() })
+      end)
+      vim.keymap.set("n", "<Leader>g", function()
+        telescope_builtin.live_grep({ cwd = GetRootDir() })
+      end)
+
+      vim.keymap.set("n", "<Leader>F", function()
         resume_or_open("Find Files", function()
           telescope_builtin.find_files({ cwd = GetRootDir() })
         end)
       end)
-      vim.keymap.set("n", "<Leader>g", function()
+      vim.keymap.set("n", "<Leader>G", function()
         resume_or_open("Live Grep", function()
           telescope_builtin.live_grep({ cwd = GetRootDir() })
         end)

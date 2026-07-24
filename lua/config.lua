@@ -6,6 +6,7 @@ vim.opt.syntax = "off"
 vim.opt.number = true
 vim.opt.relativenumber = true
 vim.opt.ignorecase = true
+vim.opt.smartcase = true
 vim.opt.incsearch = true
 vim.opt.guicursor = "a:block"
 vim.opt.linespace = 4
