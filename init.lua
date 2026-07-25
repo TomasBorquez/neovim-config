@@ -65,16 +65,17 @@ require("lazy").setup({
         "--background-index",
         "--clang-tidy",
         "--header-insertion=never",
-        "--query-driver=**",
       }
 
       if IsWindows() then
-        table.insert(clangd_cmd, "--target=x86_64-w64-mingw32")
+        table.insert(clangd_cmd, "--query-driver=C:/Users/eveti/scoop/apps/mingw/**/bin/gcc.exe")
+      else
+        table.insert(clangd_cmd, "--query-driver=**")
       end
 
       vim.lsp.config("clangd", {
         cmd = clangd_cmd,
-        filetypes = { "c", "h", "cpp", "hpp" },
+        filetypes = { "c", "cpp" },
         capabilities = capabilities,
       })
 
