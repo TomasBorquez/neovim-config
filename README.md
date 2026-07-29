@@ -1,64 +1,52 @@
 ## About
-The current version of all plugins work well with no significant bugs that I've found, so I'll not update any plugin that
-I've already installed, even if they come with flashy new features or whatever, they will stay the same unless I **REALLY**
-need to update something. In fact updating _usually_ breaks everything at the moment, so no updates coming ever :)
+The Philosophy is "simplicity above everything", meaning:
+- Just a few plugins (29 total)
+- If I need a new functionality, first look for a native option else develop it and if its too hard
+  to develop then install a plugin.
+- Avoid modularizing too much.
+- Edit config as little as possible (usually once per month at the moment)
 
 **Versions**:
 - Neovide 0.16.0
 - Neovim 0.12.0
 - OS: Windows / Linux
 
-## Philosophy
-Simplicity above all, meaning:
-- Just a few plugins (31 total)
-- Avoid modularizing and keep everything most in one place.
-- Edit config as little as possible (ideally once per year once stable).
-- Whenever I feel I need a plugin look for native alternatives, develop it myself or avoid temptation from the evil :)
+I don't plan on updating plugins/nvim, in fact most are set on a specific commit and won't be
+updated unless necessary.
 
 ## Setup
-Download [nvim 0.12.0](https://github.com/neovim/neovim/releases/tag/v0.12.0) like this on linux: 
+I'm on [neovide 0.16.0](https://github.com/neovide/neovide/releases#release-0.16.0), though you can
+use any terminal emulator of your liking.
+
+You can download [nvim 0.12.0](https://github.com/neovim/neovim/releases/tag/v0.12.0) manually
+but the python script should do this for you already, so just install python:
 ```bash
-# if you already installed it through apt:
-# sudo apt remove neovim
+# Linux Ubuntu
+sudo apt update
+sudo apt install python3
 
-curl -LO https://github.com/neovim/neovim/releases/download/v0.11.4/nvim-linux-x86_64.tar.gz
-
-tar xzvf nvim-linux-x86_64.tar.gz
-
-sudo mv nvim-linux-x86_64 /opt/nvim
-
-sudo ln -sf /opt/nvim/bin/nvim /usr/local/bin/nvim
-
-nvim --version # should print 0.11.4
-```
-
-And clone this into `.config/`, like so:
-```bash
-git clone https://github.com/TomasBorquez/neovim-config ./nvim
-```
-
-**If** on Windows, install [Scoop](https://scoop.sh/) like so:
-```ps1
+# Windows Powershell (admin)
+#  1 - install scoop
 Set-ExecutionPolicy -ExecutionPolicy RemoteSigned -Scope CurrentUser'
 Invoke-RestMethod -Uri https://get.scoop.sh | Invoke-Expression'
-```
 
-Install python3:
-```bash
-# Ubuntu
-sudo apt install python3 
-
-# Windows
+#  2 - install python
 scoop install python3
 ```
 
-And run the setup file, `python3 setup.py` which will install all the necessary dependencies and languages I regularly use. 
+Then clone the repo into your `.config/`, like so:
+```bash
+git clone https://github.com/TomasBorquez/neovim-config ~/.config/nvim
+```
 
-Lastly depending on the platform you will have to set the shell you want to use on the builtin terminal, search for the plugin `akinsho/toggleterm.nvim`
-and change the shell parameter or remove it to use the default one.
+And run the setup file, `python3 setup.py` which will install all the necessary dependencies and
+languages I regularly use.
 
-**WARNING**: This config also sets your timezone to Argentina/BuenosAires timezone.
+Lastly depending on your machine you will have to edit some paths for terminals/programs in 
+`init.lua` (all paths are set at the top of the file).
 
-And you should be done :D, if you do find any error please report it to me, this is supposed to be a single install and run perfectly
-afterwards, so it would be ideal it breaks the least possible in every platform.
+**WARNING**: This config also sets your timezone to `Argentina/BuenosAires` in the python script.
 
+And you should be done :D, if you do find any errors/bugs please report them to me, this is
+supposed to be a single install and run perfectly afterwards, so it would be ideal it breaks the
+least possible in every platform.

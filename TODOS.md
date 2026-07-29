@@ -37,9 +37,9 @@
 - [x] Add multiple terminals
 - [x] Remove yank highlight plugin
 - [x] Add win2yank to setup.py
-- [ ] Rename repo to `dotfiles` and add all config files
+- [x] Add nvim installation in setup.py
 - [ ] Add spelling keybinds
-- [ ] Add nvim installation in setup.py
+- [ ] Rename repo to `dotfiles` and add all config files
 
 ## Motions Notes
 - [x] `<C-o>` For previous place where the cursor was at 
@@ -63,3 +63,4 @@
 - [x] `<Leader-sm>` to copy command output
 - [x] `<C-r>+` paste what is on clipboard
 - [x] `<C-r>"` paste what is on yank
+- [x] `grr` get references

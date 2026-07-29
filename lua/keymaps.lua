@@ -2,7 +2,6 @@ vim.keymap.set("n", "<leader>q", "<cmd>qa<CR>")
 vim.keymap.set("n", "<leader>n", "<cmd>nohl<CR>")
 
 vim.keymap.set("n", "<leader>t", "<CMD>Oil<CR>")
-vim.keymap.set("n", "<leader>ss", "<CMD>luafile %<CR>")
 vim.keymap.set("n", "<leader>bo", "<cmd>silent! %bd|e#|bd#<cr>")
 
 vim.keymap.set("n", ">", ">>")
@@ -27,7 +26,6 @@ vim.keymap.set("n", "gh", function()
 end)
 
 vim.keymap.set("v", "<leader>p", "\"_dP")
-vim.keymap.set("i", "<C-BS>", "<C-W>", { noremap = true })
 
 -- Window navigation
 vim.keymap.set("n", "<A-h>", "<C-w>h")
@@ -35,19 +33,16 @@ vim.keymap.set("n", "<A-j>", "<C-w>j")
 vim.keymap.set("n", "<A-k>", "<C-w>k")
 vim.keymap.set("n", "<A-l>", "<C-w>l")
 
--- Window splits
-vim.keymap.set("n", "<leader>ws", "<cmd>vsplit<CR>")
-
 if vim.g.neovide == true then
   pcall(function() vim.keymap.del("n", "<C-^>") end)
 
   vim.keymap.set("n", "<C-^>", function()
     vim.g.neovide_scale_factor = vim.g.neovide_scale_factor + 0.1
-  end, { silent = true })
+  end)
 
   vim.keymap.set("n", "<C-->", function()
     vim.g.neovide_scale_factor = vim.g.neovide_scale_factor - 0.1
-  end, { silent = true })
+  end)
 end
 
 local function map_nop(key, mode)

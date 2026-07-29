@@ -47,11 +47,11 @@ require("lazy").setup({
       local capabilities = require("cmp_nvim_lsp").default_capabilities()
 
       require("mason-lspconfig").setup({
-        ensure_installed = { "lua_ls", "clangd", "glsl_analyzer", "tsserver", "svelte", "biome", "gopls" },
+        ensure_installed = { "lua_ls", "clangd", "glsl_analyzer",
+                             "tsserver", "svelte", "biome", "gopls", "pyright" },
       })
 
       local mason_registry = require("mason-registry")
-
       if not mason_registry.is_installed("clang-format") then
         vim.cmd("MasonInstall clang-format")
       end
@@ -74,9 +74,9 @@ require("lazy").setup({
       end
 
       vim.lsp.config("clangd", {
-        cmd = clangd_cmd,
         filetypes = { "c", "cpp" },
         capabilities = capabilities,
+        cmd = clangd_cmd,
       })
 
       vim.lsp.config("glsl_analyzer", {
@@ -85,9 +85,9 @@ require("lazy").setup({
       })
 
       vim.lsp.config("ts_ls", {
-        cmd = { "typescript-language-server", "--stdio" },
         filetypes = { "javascript", "javascriptreact", "typescript", "typescriptreact" },
         capabilities = capabilities,
+        cmd = { "typescript-language-server", "--stdio" },
       })
 
       vim.lsp.config("biome", {
@@ -101,8 +101,8 @@ require("lazy").setup({
       })
 
       vim.lsp.config("gopls", {
-        capabilities = capabilities,
         filetypes = { "go", "gomod", "gowork", "gotmpl" },
+        capabilities = capabilities,
         settings = {
           gopls = {
             analyses = {
@@ -114,7 +114,13 @@ require("lazy").setup({
         },
       })
 
-      vim.lsp.enable({ "lua_ls", "clangd", "glsl_analyzer", "ts_ls", "biome", "svelte", "gopls" })
+      vim.lsp.config("pyright", {
+        filetypes = { "python" },
+        capabilities = capabilities,
+      })
+
+      vim.lsp.enable({ "lua_ls", "clangd", "glsl_analyzer",
+                       "ts_ls", "biome", "svelte", "gopls", "pyright" })
 
       --[[ Conform ]]
       local conform = require("conform")
@@ -145,10 +151,10 @@ require("lazy").setup({
         })
       end)
 
-      local key = vim.api.nvim_replace_termcodes("<Esc>", true, false, true)
+      local escape_key = vim.api.nvim_replace_termcodes("<Esc>", true, false, true)
       vim.keymap.set("v", "<C-f>", function()
         conform.format({ lsp_fallback = true, async = true })
-        vim.api.nvim_feedkeys(key, "n", false) -- presses escape
+        vim.api.nvim_feedkeys(escape_key, "n", false)
       end)
 
       vim.keymap.set("n", "<leader>m", function()
@@ -298,6 +304,7 @@ require("lazy").setup({
     config = function()
       local telescope_builtin = require("telescope.builtin")
       local telescope_state = require("telescope.state")
+      local telescope_prev_utils = require("telescope.previewers.utils")
 
       local function resume_or_open(title, open)
         local root = GetRootDir()
@@ -332,9 +339,6 @@ require("lazy").setup({
       local telescope = require("telescope")
       telescope.setup({
         defaults = {
-          preview = {
-            treesitter = false,
-          },
           cache_picker = {
             num_pickers = 10,
           },
@@ -362,6 +366,19 @@ require("lazy").setup({
         }
       })
       telescope.load_extension("fzf")
+
+      ---@diagnostic disable-next-line: duplicate-set-field
+      telescope_prev_utils.ts_highlighter = function(bufnr, ft)
+        if not ft or ft == "" then
+          return false
+        end
+
+        local lang = vim.treesitter.language.get_lang(ft)
+        if lang and vim.treesitter.language.add(lang) then
+          return false
+        end
+        return (pcall(vim.treesitter.start, bufnr, lang))
+      end
     end
   },
   {
@@ -374,6 +391,14 @@ require("lazy").setup({
       })
 
       require("nvim-treesitter").setup()
+      require("nvim-treesitter").install({
+        "c", "cpp", "rust", "glsl",
+        "markdown", "markdown_inline", "latex",
+        "javascript", "typescript", "lua", "python",
+        "jsx", "tsx", "svelte", "html", "css",
+        "json", "yaml", "bash",
+        "query", "dockerfile",
+      })
 
       vim.api.nvim_create_autocmd("FileType", {
         group = vim.api.nvim_create_augroup("treesitter_highlight", { clear = true }),
@@ -402,7 +427,6 @@ require("lazy").setup({
         use_default_keymaps = false,
         keymaps = {
           ["<CR>"] = "actions.select",
-          ["<leader>p"] = "actions.preview",
           ["<leader>r"] = "actions.refresh",
         },
       })
@@ -479,7 +503,8 @@ require("lazy").setup({
   {
     "windwp/nvim-ts-autotag",
     dependencies = { "nvim-treesitter/nvim-treesitter" },
-    ft = { "html", "javascript", "javascriptreact", "typescript", "typescriptreact", "svelte", "vue", "xml" },
+    ft = { "html", "javascript", "javascriptreact", "typescript",
+           "typescriptreact", "svelte", "vue", "xml" },
     config = function()
       require("nvim-ts-autotag").setup({
         opts = {

@@ -9,6 +9,7 @@ vim.opt.ignorecase = true
 vim.opt.smartcase = true
 vim.opt.incsearch = true
 vim.opt.guicursor = "a:block"
+vim.opt.colorcolumn = "100"
 vim.opt.linespace = 4
 vim.opt.tabstop = 2
 vim.opt.softtabstop = 2
