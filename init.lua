@@ -1,29 +1,75 @@
-local current_dir = vim.fn.getcwd()
-local wsl_root = "/mnt/c/WINDOWS/system32"
-local win_root = "C:\\Program Files\\Neovide"
+require("utils")
 
-if current_dir == wsl_root or current_dir == win_root then
+-- [[ Paths ]]
+Paths = {
+  bin_dirs = {
+    vim.env.HOME .. "/.local/bin",
+    vim.env.HOME .. "/.cargo/bin",
+  },
+
+  no_project_dirs = {
+    "/mnt/c/WINDOWS/system32",
+    "C:\\Program Files\\Neovide",
+  },
+
+  lazy = vim.fn.stdpath("data") .. "/lazy/lazy.nvim",
+  spellfile = vim.fn.stdpath("config") .. "/spell/en.utf-8.add",
+  windows_shell = "C:\\Users\\eveti\\scoop\\apps\\git\\current\\bin\\bash.exe",
+  windows_query_driver = "C:/Users/eveti/scoop/apps/mingw/**/bin/gcc.exe",
+}
+
+-- [[ Command Shortcuts ]]
+Paths.commands = IsWindows() and {
+  Programming = "~/Programming/learn/",
+  Shada       = "~/AppData/Local/nvim-data/shada/",
+  Config      = "~/AppData/Local/nvim/",
+  Learn       = "~/Programming/learn/",
+  Ideas       = "~/programming/ideas/",
+  Videos      = "~/programming/videos/",
+  AppData     = "~/AppData/",
+  Bashrc      = "~/.bashrc",
+} or {
+  Programming = "~/programming/learn/",
+  Shada       = "~/.local/state/nvim/shada/",
+  Config      = "~/.config/nvim/",
+  Learn       = "~/programming/learn/",
+  Ideas       = "~/programming/ideas/",
+  Kernel      = "~/programming/learn/kernel/",
+  VM          = "~/programming/learn/qemu-kernel-vm/",
+  Bashrc      = "~/.bashrc",
+}
+
+local function prepend_path(dir)
+  if vim.fn.isdirectory(dir) == 1 and not vim.env.PATH:find(dir, 1, true) then
+    vim.env.PATH = dir .. ":" .. vim.env.PATH
+  end
+end
+
+if vim.fn.has("unix") == 1 then
+  for _, dir in ipairs(Paths.bin_dirs) do
+    prepend_path(dir)
+  end
+end
+
+if vim.tbl_contains(Paths.no_project_dirs, vim.fn.getcwd()) then
   vim.cmd("cd " .. vim.fn.expand("~"))
 end
 
-local lazypath = vim.fn.stdpath("data") .. "/lazy/lazy.nvim"
-
 ---@diagnostic disable-next-line: undefined-field
-if not vim.loop.fs_stat(lazypath) then
+if not vim.loop.fs_stat(Paths.lazy) then
   vim.fn.system({
     "git",
     "clone",
     "--filter=blob:none",
     "https://github.com/folke/lazy.nvim.git",
     "--branch=stable",
-    lazypath,
+    Paths.lazy,
   })
 end
-vim.opt.rtp:prepend(lazypath)
+vim.opt.rtp:prepend(Paths.lazy)
 
 require("config")
 require("keymaps")
-require("utils")
 require("lazy").setup({
   {
     "neovim/nvim-lspconfig",
@@ -68,7 +114,7 @@ require("lazy").setup({
       }
 
       if IsWindows() then
-        table.insert(clangd_cmd, "--query-driver=C:/Users/eveti/scoop/apps/mingw/**/bin/gcc.exe")
+        table.insert(clangd_cmd, "--query-driver=" .. Paths.windows_query_driver)
       else
         table.insert(clangd_cmd, "--query-driver=**")
       end
@@ -157,10 +203,6 @@ require("lazy").setup({
         vim.api.nvim_feedkeys(escape_key, "n", false)
       end)
 
-      vim.keymap.set("n", "<leader>m", function()
-        vim.diagnostic.jump({ count = 1 })
-      end)
-
       vim.api.nvim_create_autocmd("LspAttach", {
         group = vim.api.nvim_create_augroup("UserLspConfig", {}),
         callback = function(args)
@@ -174,7 +216,6 @@ require("lazy").setup({
           vim.keymap.set("n", "gh", vim.lsp.buf.hover, opts)
           vim.keymap.set("n", "gm", vim.diagnostic.open_float, opts)
           vim.keymap.set("n", "<leader>r", vim.lsp.buf.rename, opts)
-          vim.keymap.set("n", "<C-.>", vim.lsp.buf.code_action, opts)
         end,
       })
 
@@ -240,7 +281,7 @@ require("lazy").setup({
 
       if IsWindows() then
         -- INFO: Config for Gitbash:
-        opts.shell = "C:\\Users\\eveti\\scoop\\apps\\git\\current\\bin\\bash.exe"
+        opts.shell = Paths.windows_shell
       end
 
       local harpoon = require("harpoon")

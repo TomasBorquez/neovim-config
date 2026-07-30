@@ -24,7 +24,13 @@ vim.opt.list = true
 vim.opt.listchars:append({ tab = "  ", trail = "·" })
 vim.bo.fileformat = "unix"
 
-if vim.fn.has("win32") == 1 or vim.fn.has("win64") == 1 then
+vim.opt.spell = false
+vim.opt.spelllang = "en_us"
+vim.opt.spelloptions = "camel"
+vim.opt.spellfile = Paths.spellfile
+vim.opt.spellsuggest = "best,9"
+
+if IsWindows() then
   vim.opt.swapfile = false
 end
 
@@ -51,7 +57,7 @@ vim.diagnostic.config({
 
 vim.loader.enable()
 
--- Unused default plugins
+-- [[ Unused Plugins ]]
 vim.g.loaded_netrw = 1
 vim.g.loaded_netrwPlugin = 1
 vim.g.loaded_gzip = 1

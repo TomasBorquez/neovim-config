@@ -42,8 +42,10 @@ git clone https://github.com/TomasBorquez/neovim-config ~/.config/nvim
 And run the setup file, `python3 setup.py` which will install all the necessary dependencies and
 languages I regularly use.
 
-Lastly depending on your machine you will have to edit some paths for terminals/programs in 
-`init.lua` (all paths are set at the top of the file).
+Lastly depending on your machine you will have to edit some paths for terminals/programs, they all
+live on the `Paths` table at the top of `init.lua`, that includes the `:Learn`/`:Ideas`/`:Config`
+style shortcuts on `Paths.commands` (a trailing `/` opens the directory on oil, otherwise the file
+gets opened on a buffer).
 
 **WARNING**: This config also sets your timezone to `Argentina/BuenosAires` in the python script.
 

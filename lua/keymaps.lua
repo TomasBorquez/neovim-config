@@ -17,6 +17,8 @@ vim.keymap.set({ "n", "v" }, "<leader>v", function()
   vim.schedule(function() vim.cmd("normal! \"+p") end)
 end)
 
+vim.keymap.set("i", "<C-S-v>", "<C-r><C-o>+")
+
 vim.keymap.set("n", "<Leader>cm", function()
   vim.fn.setreg("+", vim.fn.execute("messages"))
 end)
@@ -26,6 +28,51 @@ vim.keymap.set("n", "gh", function()
 end)
 
 vim.keymap.set("v", "<leader>p", "\"_dP")
+
+-- [[ Spelling ]]
+vim.keymap.set("n", "<leader>ss", function()
+  vim.opt_local.spell = not vim.opt_local.spell:get()
+  print("spell " .. (vim.opt_local.spell:get() and "on" or "off"))
+end)
+
+local function typo_under_cursor()
+  if not vim.wo.spell then
+    return false
+  end
+
+  local pos = vim.api.nvim_win_get_cursor(0)
+  local typo = vim.fn.spellbadword()[1]
+  local found = vim.api.nvim_win_get_cursor(0)
+  vim.api.nvim_win_set_cursor(0, pos)
+
+  return typo ~= "" and found[1] == pos[1] and found[2] <= pos[2] and pos[2] < found[2] + #typo
+end
+
+vim.keymap.set("n", "<C-.>", function()
+  if typo_under_cursor() then
+    local themes = require("telescope.themes")
+    require("telescope.builtin").spell_suggest(themes.get_cursor())
+    return
+  end
+
+  if next(vim.lsp.get_clients({ bufnr = 0, method = "textDocument/codeAction" })) then
+    vim.lsp.buf.code_action()
+  end
+end)
+
+-- Same as the diagnostic jump, on a buffer without diagnostics left it walks the typos instead
+vim.keymap.set("n", "<leader>m", function()
+  if vim.wo.spell then
+    vim.cmd("silent! normal! ]s")
+  end
+
+  if vim.diagnostic.jump({ count = 1 }) then
+    return
+  end
+end)
+
+-- Fix the typo you just wrote without losing your place
+vim.keymap.set("i", "<C-.>", "<C-g>u<Esc>[s1z=`]a<C-g>u")
 
 -- Window navigation
 vim.keymap.set("n", "<A-h>", "<C-w>h")
@@ -49,7 +96,7 @@ local function map_nop(key, mode)
   vim.keymap.set(mode, key, "<Nop>", { noremap = true })
 end
 
--- Unbind annoying motions:
+-- [[ Unbinds ]]
 map_nop("<C-h>", "i")
 map_nop("<C-u>", "i")
 map_nop("<C-o>", "i")

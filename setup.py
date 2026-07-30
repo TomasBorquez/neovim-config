@@ -74,6 +74,7 @@ def enable_windows_vt():
     except (AttributeError, OSError):
         return False
 
+
 def supports_color():
     if os.environ.get("NO_COLOR"):
         return False
@@ -83,10 +84,11 @@ def supports_color():
         return enable_windows_vt()
     return True
 
-USE_COLOR = supports_color()
 
+USE_COLOR = supports_color()
 def paint(color, text):
     return f"{color}{text}{RESET}" if USE_COLOR else text
+
 
 # --- Logs ---
 def section(title, color=None):
@@ -94,25 +96,32 @@ def section(title, color=None):
     print(paint(color, title) if color else title)
     print(SEPARATOR)
 
+
 def log(msg):
     print(paint(GRAY, f"[*] {msg}"))
+
 
 def ok(msg):
     print(paint(GREEN, f"[+] {msg}"))
 
+
 def warn(msg):
     print(paint(ORANGE, f"[!] {msg}"))
 
+
 def err(msg):
     print(paint(RED, f"[-] {msg}"))
+
 
 def record_failure(label, detail=None):
     FAILURES.append(label)
     err(f"{label} failed" + (f": {detail}" if detail else ""))
 
+
 # --- Commands ---
 def check_command_exists(cmd):
     return shutil.which(cmd) is not None
+
 
 def run_command(cmd, shell=False, label=None):
     if shell:
@@ -137,8 +146,10 @@ def run_command(cmd, shell=False, label=None):
                        output[-1] if output else f"exit code {e.returncode}")
         return False
 
+
 def run_bash(script, label=None):
     return run_command(["bash", "-c", script], label=label)
+
 
 def capture_output(cmd):
     parts = cmd.split()
@@ -159,6 +170,7 @@ def install_packages(packages, install):
     for category, pkgs in packages.items():
         log(f"Installing {category}...")
         install(pkgs)
+
 
 # --- Windows ---
 def refresh_windows_env():
@@ -460,6 +472,7 @@ def main():
     print("")
 
     sys.exit(1 if FAILURES else 0)
+
 
 if __name__ == "__main__":
     main()

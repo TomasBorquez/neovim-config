@@ -38,7 +38,7 @@
 - [x] Remove yank highlight plugin
 - [x] Add win2yank to setup.py
 - [x] Add nvim installation in setup.py
-- [ ] Add spelling keybinds
+- [x] Add spelling keybinds
 - [ ] Rename repo to `dotfiles` and add all config files
 
 ## Motions Notes
@@ -57,10 +57,15 @@
 - [x] `gf` Open buffer on location 
 - [x] `:s/old/new/g` For replacing all instances of a text
 - [x] `:set spell!` Toggle spellcheck
+- [x] `<Leader>ss` Toggle spellcheck on the current buffer
+- [x] `<C-.>` On a typo it offers corrections, else the LSP code action
+- [x] `<C-.>` On insert mode, fix the typo you just wrote and keep typing
+- [x] `<Leader>m` Next diagnostic, once there are none left it walks the typos
 - [x] `*` Search for word under the cursor
 - [x] `qq` To start recording `q` to stop, and `@@` to execute last macro
 - [x] `<C-d>` to quit gdb
 - [x] `<Leader-sm>` to copy command output
 - [x] `<C-r>+` paste what is on clipboard
 - [x] `<C-r>"` paste what is on yank
+- [x] `<C-S-v>` On insert mode, paste the clipboard literally
 - [x] `grr` get references
