@@ -17,7 +17,8 @@ vim.keymap.set({ "n", "v" }, "<leader>v", function()
   vim.schedule(function() vim.cmd("normal! \"+p") end)
 end)
 
-vim.keymap.set("i", "<C-S-v>", "<C-r><C-o>+")
+vim.keymap.set("i", "<C-S-v>", "<C-r><C-r>+")
+vim.keymap.set("c", "<C-S-v>", "<C-r><C-r>+")
 
 vim.keymap.set("n", "<Leader>cm", function()
   vim.fn.setreg("+", vim.fn.execute("messages"))
