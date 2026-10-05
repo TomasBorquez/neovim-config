@@ -75,12 +75,6 @@ end)
 -- Fix the typo you just wrote without losing your place
 vim.keymap.set("i", "<C-.>", "<C-g>u<Esc>[s1z=`]a<C-g>u")
 
--- Window navigation
-vim.keymap.set("n", "<A-h>", "<C-w>h")
-vim.keymap.set("n", "<A-j>", "<C-w>j")
-vim.keymap.set("n", "<A-k>", "<C-w>k")
-vim.keymap.set("n", "<A-l>", "<C-w>l")
-
 if vim.g.neovide == true then
   pcall(function() vim.keymap.del("n", "<C-^>") end)
 

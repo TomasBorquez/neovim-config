@@ -1,7 +1,7 @@
-vim.o.guifont = "Comic Mono:h18:#e-antialias"
+vim.o.guifont = "Comic Mono Fixed:h18:#e-antialias"
 vim.o.sessionoptions = "blank,buffers,curdir,folds,help,tabpages,winsize,winpos,terminal,localoptions"
 vim.g.mapleader = " "
-vim.g.c_syntax_for_h = 1 -- detect .h files
+vim.g.c_syntax_for_h = 1
 vim.opt.syntax = "off"
 vim.opt.number = true
 vim.opt.relativenumber = true
@@ -10,11 +10,6 @@ vim.opt.smartcase = true
 vim.opt.incsearch = true
 vim.opt.guicursor = "a:block"
 vim.opt.colorcolumn = "100"
-vim.opt.linespace = 4
-vim.opt.tabstop = 2
-vim.opt.softtabstop = 2
-vim.opt.shiftwidth = 2
-vim.opt.expandtab = true
 vim.opt.signcolumn = "yes"
 vim.opt.wrap = false
 vim.opt.updatetime = 300
@@ -23,6 +18,11 @@ vim.opt.fileformats = "unix,dos"
 vim.opt.list = true
 vim.opt.listchars:append({ tab = "  ", trail = "·" })
 vim.bo.fileformat = "unix"
+
+vim.opt.expandtab = true
+vim.opt.shiftwidth = 2
+vim.opt.softtabstop = -1
+vim.opt.tabstop = 2
 
 vim.opt.spell = false
 vim.opt.spelllang = "en_us"

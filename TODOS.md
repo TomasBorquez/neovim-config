@@ -3,14 +3,14 @@
 - [x] Get different color each month for cowsay
 - [x] Get random quote each day for cow say
 - [x] Center cow and quotes
-- [x] Unbind oil.nvim keybinds
+- [x] Unbind `oil.nvim` keybinds
 - [x] Paste in terminal
 - [x] Find how to get in vim mode in terminal and how to get out of it
 - [x] Source current file so I don't have to restart
 - [x] Find out why is it pasting by default and making it all a comment
 - [x] Format on save
 - [x] Learn to use <C-v>
-- [x] Add VimSurround 
+- [x] Add VimSurround
 - [x] Learn VimSurround
 - [x] Remove wrap
 - [x] Learn TeleScope
@@ -27,22 +27,24 @@
 - [x] Add `telescope-fzf-native.nvim`
 - [x] Fix the insert after comment thing that makes it annoying to type
 - [x] Figure out why copy lags out
-- [x] Fix Clangd not working on .h files
+- [x] Fix Clangd not working on `.h` files
 - [x] Add GLSL LSP
 - [x] Fix TreeSitter
 - [x] Lower amount of recommendations `nvim-cmp`
 - [x] Make terminal *cwd* equal to what `oil.nvim` has as *cwd*
-- [x] Add debugger support for `ggdb`
 - [x] Create a setup script
 - [x] Add multiple terminals
 - [x] Remove yank highlight plugin
-- [x] Add win2yank to setup.py
-- [x] Add nvim installation in setup.py
+- [x] Add win2yank to `setup.py`
+- [x] Add nvim installation in `setup.py`
 - [x] Add spelling keybinds
+- [ ] Make <Leader>m go to first critical diagnostic, else to next warning, else to next
+      spell error and keep `:messages` quiet
+- [ ] Harpoon should be disabled when on terminal
 - [ ] Rename repo to `dotfiles` and add all config files
 
 ## Motions Notes
-- [x] `<C-o>` For previous place where the cursor was at 
+- [x] `<C-o>` For previous place where the cursor was at
 - [x] `<C-i>` For next place where the cursor was at
 - [x] `<C-v>$A` For appending at the end
 - [x] `<C-v>I` For inserting at the start
@@ -54,7 +56,7 @@
 - [x] `<C-a>` To increment
 - [x] `<C-v> g <C-a>` To increment
 - [x] `gx` Open URL on browser
-- [x] `gf` Open buffer on location 
+- [x] `gf` Open buffer on location
 - [x] `:s/old/new/g` For replacing all instances of a text
 - [x] `:set spell!` Toggle spellcheck
 - [x] `<Leader>ss` Toggle spellcheck on the current buffer
@@ -63,9 +65,11 @@
 - [x] `<Leader>m` Next diagnostic, once there are none left it walks the typos
 - [x] `*` Search for word under the cursor
 - [x] `qq` To start recording `q` to stop, and `@@` to execute last macro
-- [x] `<C-d>` to quit gdb
+- [x] `<C-d>` to quit GDB
 - [x] `<Leader-sm>` to copy command output
 - [x] `<C-r>+` paste what is on clipboard
 - [x] `<C-r>"` paste what is on yank
 - [x] `<C-S-v>` On insert mode, paste the clipboard literally
-- [x] `grr` get references
+- [x] `zg` add to dictionary
+- [x] `zug` undo
+- [ ] `grr` get references
