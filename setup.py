@@ -20,10 +20,17 @@ WIN32YANK_URL   = f"https://github.com/equalsraf/win32yank/releases/download/v{W
 
 NVM_SOURCE = 'export NVM_DIR="$HOME/.nvm"; . "$NVM_DIR/nvm.sh";'
 
-LINUX_PACKAGES = {
+APT_PACKAGES = {
     "Essential build tools": ["build-essential", "cmake", "curl", "wget", "git"],
     "Mason dependencies": ["unzip", "python3-pip", "python3-venv", "ripgrep"],
     "Go": ["golang-go"],
+    "C/C++ tools": ["clang", "gdb"],
+}
+
+FEDORA_PACKAGES = {
+    "Essential build tools": ["gcc", "gcc-c++", "make", "cmake", "curl", "wget", "git", "tar", "gzip"],
+    "Mason dependencies": ["unzip", "python3-pip", "ripgrep"],
+    "Go": ["golang"],
     "C/C++ tools": ["clang", "gdb"],
 }
 
@@ -308,8 +315,22 @@ def setup_windows():
 
 
 # --- Linux ---
-def install_apt_packages(pkgs):
-    if run_command(["sudo", "apt", "install", "-y"] + pkgs, label=" ".join(pkgs)):
+def linux_distro_id():
+    for path in ("/etc/os-release", "/usr/lib/os-release"):
+        try:
+            with open(path, encoding="utf-8") as release:
+                for line in release:
+                    key, _, value = line.strip().partition("=")
+                    if key == "ID":
+                        return value.strip("'\"").lower()
+                return ""
+        except OSError:
+            continue
+    return ""
+
+
+def install_linux_packages(manager, pkgs):
+    if run_command(["sudo", manager, "install", "-y"] + pkgs, label=" ".join(pkgs)):
         ok(f"{len(pkgs)} package(s) installed")
 
 
@@ -327,7 +348,7 @@ def check_go_version():
     wanted = ".".join(str(n) for n in MIN_GO_VERSION)
     if found < MIN_GO_VERSION:
         warn(f"Go {found[0]}.{found[1]} is too old for current gopls (needs {wanted}+).")
-        warn("Install a newer toolchain from https://go.dev/dl/ instead of golang-go.")
+        warn("Install a newer toolchain from https://go.dev/dl/.")
 
 
 def install_node_linux():
@@ -394,10 +415,15 @@ def install_nvim_linux():
 def setup_linux():
     section("Detected Linux/WSL")
 
-    log("Updating package lists...")
-    run_command(["sudo", "apt", "update"], label="apt update")
+    if linux_distro_id() == "fedora":
+        manager, update, packages = "dnf", "makecache", FEDORA_PACKAGES
+    else:
+        manager, update, packages = "apt", "update", APT_PACKAGES
 
-    install_packages(LINUX_PACKAGES, install_apt_packages)
+    log("Updating package lists...")
+    run_command(["sudo", manager, update], label=f"{manager} {update}")
+
+    install_packages(packages, lambda pkgs: install_linux_packages(manager, pkgs))
     check_go_version()
 
     install_node_linux()
