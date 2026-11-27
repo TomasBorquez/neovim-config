@@ -21,9 +21,12 @@ use any terminal emulator of your liking.
 You can download [nvim 0.12.0](https://github.com/neovim/neovim/releases/tag/v0.12.0) manually
 but the python script should do this for you already, so just install python:
 ```bash
-# Linux Ubuntu
+# Ubuntu / Debian
 sudo apt update
 sudo apt install python3
+
+# Fedora
+sudo dnf install python3
 
 # Windows Powershell (admin)
 #  1 - install scoop
